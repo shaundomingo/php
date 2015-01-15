@@ -32,16 +32,16 @@ end
 
 action :install do
   # If we specified a version, and it's not the current version, move to the specified version
-  install_version = @new_resource.version unless @new_resource.version.nil? || @new_resource.version == @current_resource.version
+  install_version = new_resource.version unless new_resource.version.nil? || new_resource.version == @current_resource.version
 
   # If it's not installed at all or an upgrade, install it
   if install_version || @current_resource.version.nil?
-    description = "install package #{@new_resource} #{install_version}"
+    description = "install package #{new_resource} #{install_version}"
     converge_by(description) do
-      info_output = "Installing #{@new_resource}"
+      info_output = "Installing #{new_resource}"
       info_output << " version #{install_version}" if install_version && !install_version.empty?
       Chef::Log.info(info_output)
-      status = install_package(@new_resource.package_name, install_version)
+      install_package(new_resource.package_name, install_version)
     end
   end
 end
@@ -49,20 +49,20 @@ end
 action :upgrade do
   if @current_resource.version != candidate_version
     orig_version = @current_resource.version || 'uninstalled'
-    description = "upgrade package #{@new_resource} version from #{orig_version} to #{candidate_version}"
+    description = "upgrade package #{new_resource} version from #{orig_version} to #{candidate_version}"
     converge_by(description) do
-      Chef::Log.info("Upgrading #{@new_resource} version from #{orig_version} to #{candidate_version}")
-      status = upgrade_package(@new_resource.package_name, candidate_version)
+      Chef::Log.info("Upgrading #{new_resource} version from #{orig_version} to #{candidate_version}")
+      upgrade_package(new_resource.package_name, candidate_version)
     end
   end
 end
 
 action :remove do
   if removing_package?
-    description = "remove package #{@new_resource}"
+    description = "remove package #{new_resource}"
     converge_by(description) do
-      Chef::Log.info("Removing #{@new_resource}")
-      remove_package(@current_resource.package_name, @new_resource.version)
+      Chef::Log.info("Removing #{new_resource}")
+      remove_package(@current_resource.package_name, new_resource.version)
     end
   else
   end
@@ -70,10 +70,10 @@ end
 
 action :purge do
   if removing_package?
-    description = "purge package #{@new_resource}"
+    description = "purge package #{new_resource}"
     converge_by(description) do
-      Chef::Log.info("Purging #{@new_resource}")
-      purge_package(@current_resource.package_name, @new_resource.version)
+      Chef::Log.info("Purging #{new_resource}")
+      purge_package(@current_resource.package_name, new_resource.version)
     end
   end
 end
@@ -81,9 +81,9 @@ end
 def removing_package?
   if @current_resource.version.nil?
     false # nothing to remove
-  elsif @new_resource.version.nil?
+  elsif new_resource.version.nil?
     true # remove any version of a package
-  elsif @new_resource.version == @current_resource.version
+  elsif new_resource.version == @current_resource.version
     true # remove the version we have
   else
     false # we don't have the version we want to remove
@@ -99,11 +99,11 @@ end
 # so refactoring into core Chef should be easy
 
 def load_current_resource
-  @current_resource = Chef::Resource::PhpPear.new(@new_resource.name)
-  @current_resource.package_name(@new_resource.package_name)
+  @current_resource = Chef::Resource::PhpPear.new(new_resource.name)
+  @current_resource.package_name(new_resource.package_name)
   @bin = node['php']['pear']
   if pecl?
-    Chef::Log.debug("#{@new_resource} smells like a pecl...installing package in Pecl mode.")
+    Chef::Log.debug("#{new_resource} smells like a pecl...installing package in Pecl mode.")
     @bin = node['php']['pecl']
   end
   Chef::Log.debug("#{@current_resource}: Installed version: #{current_installed_version} Candidate version: #{candidate_version}")
@@ -117,13 +117,12 @@ end
 
 def current_installed_version
   @current_installed_version ||= begin
-                                   v = nil
                                    version_check_cmd = "#{@bin} -d "
-                                   version_check_cmd << " preferred_state=#{can_haz(@new_resource, "preferred_state")}"
-                                   version_check_cmd << " list#{expand_channel(can_haz(@new_resource, "channel"))}"
+                                   version_check_cmd << " preferred_state=#{can_haz(new_resource, 'preferred_state')}"
+                                   version_check_cmd << " list#{expand_channel(can_haz(new_resource, 'channel'))}"
                                    p = shell_out(version_check_cmd)
                                    response = nil
-                                   response = grep_for_version(p.stdout, @new_resource.package_name) if p.stdout =~ /\.?Installed packages/i
+                                   response = grep_for_version(p.stdout, new_resource.package_name) if p.stdout =~ /\.?Installed packages/i
                                    response
                                  end
 end
@@ -131,40 +130,40 @@ end
 def candidate_version
   @candidate_version ||= begin
                            candidate_version_cmd = "#{@bin} -d "
-                           candidate_version_cmd << "preferred_state=#{can_haz(@new_resource, "preferred_state")}"
-                           candidate_version_cmd << " search#{expand_channel(can_haz(@new_resource, "channel"))}"
-                           candidate_version_cmd << "#{@new_resource.package_name}"
+                           candidate_version_cmd << "preferred_state=#{can_haz(new_resource, 'preferred_state')}"
+                           candidate_version_cmd << " search#{expand_channel(can_haz(new_resource, 'channel'))}"
+                           candidate_version_cmd << "#{new_resource.package_name}"
                            p = shell_out(candidate_version_cmd)
                            response = nil
-                           response = grep_for_version(p.stdout, @new_resource.package_name) if p.stdout =~ /\.?Matched packages/i
+                           response = grep_for_version(p.stdout, new_resource.package_name) if p.stdout =~ /\.?Matched packages/i
                            response
                          end
 end
 
 def install_package(name, version)
   command = "echo \"\r\" | #{@bin} -d"
-  command << " preferred_state=#{can_haz(@new_resource, "preferred_state")}"
-  command << " install -a#{expand_options(@new_resource.options)}"
-  command << " #{prefix_channel(can_haz(@new_resource, "channel"))}#{name}"
+  command << " preferred_state=#{can_haz(new_resource, 'preferred_state')}"
+  command << " install -a#{expand_options(new_resource.options)}"
+  command << " #{prefix_channel(can_haz(new_resource, 'channel'))}#{name}"
   command << "-#{version}" if version && !version.empty?
   pear_shell_out(command)
-  manage_pecl_ini(name, :create, can_haz(@new_resource, 'directives'), can_haz(@new_resource, 'zend_extensions')) if pecl?
+  manage_pecl_ini(name, :create, can_haz(new_resource, 'directives'), can_haz(new_resource, 'zend_extensions')) if pecl?
 end
 
 def upgrade_package(name, version)
   command = "echo \"\r\" | #{@bin} -d"
-  command << " preferred_state=#{can_haz(@new_resource, "preferred_state")}"
-  command << " upgrade -a#{expand_options(@new_resource.options)}"
-  command << " #{prefix_channel(can_haz(@new_resource, "channel"))}#{name}"
+  command << " preferred_state=#{can_haz(new_resource, 'preferred_state')}"
+  command << " upgrade -a#{expand_options(new_resource.options)}"
+  command << " #{prefix_channel(can_haz(new_resource, 'channel'))}#{name}"
   command << "-#{version}" if version && !version.empty?
   pear_shell_out(command)
-  manage_pecl_ini(name, :create, can_haz(@new_resource, 'directives'), can_haz(@new_resource, 'zend_extensions')) if pecl?
+  manage_pecl_ini(name, :create, can_haz(new_resource, 'directives'), can_haz(new_resource, 'zend_extensions')) if pecl?
 end
 
 def remove_package(name, version)
   command = "#{@bin} uninstall"
-  command << " #{expand_options(@new_resource.options)}"
-  command << " #{prefix_channel(can_haz(@new_resource, "channel"))}#{name}"
+  command << " #{expand_options(new_resource.options)}"
+  command << " #{prefix_channel(can_haz(new_resource, 'channel'))}#{name}"
   command << "-#{version}" if version && !version.empty?
   pear_shell_out(command)
   manage_pecl_ini(name, :delete) if pecl?
@@ -189,7 +188,7 @@ def prefix_channel(channel)
   channel ? "#{channel}/" : ''
 end
 
-def get_extension_dir
+def extension_dir
   @extension_dir ||= begin
                        # Consider using "pecl config-get ext_dir". It is more cross-platform.
                        # p = shell_out("php-config --extension-dir")
@@ -198,7 +197,7 @@ def get_extension_dir
                      end
 end
 
-def get_extension_files(name)
+def extension_files(name)
   files = []
 
   p = shell_out("#{@bin} list-files #{name}")
@@ -210,18 +209,18 @@ def get_extension_files(name)
 end
 
 def manage_pecl_ini(name, action, directives, zend_extensions)
-  ext_prefix = get_extension_dir
+  ext_prefix = extension_dir
   ext_prefix << ::File::SEPARATOR if ext_prefix[-1].chr != ::File::SEPARATOR
 
-  files = get_extension_files(name)
+  files = extension_files(name)
 
   extensions = Hash[
-    files.map do |filepath|
-      rel_file = filepath.clone
-      rel_file.slice! ext_prefix if rel_file.start_with? ext_prefix
-      zend = zend_extensions.include?(rel_file)
-      [(zend ? filepath : rel_file) , zend]
-    end
+               files.map do |filepath|
+                 rel_file = filepath.clone
+                 rel_file.slice! ext_prefix if rel_file.start_with? ext_prefix
+                 zend = zend_extensions.include?(rel_file)
+                 [(zend ? filepath : rel_file), zend]
+               end
   ]
 
   template "#{node['php']['ext_conf_dir']}/#{name}.ini" do
@@ -230,7 +229,7 @@ def manage_pecl_ini(name, action, directives, zend_extensions)
     owner 'root'
     group 'root'
     mode '0644'
-    variables(:name => name, :extensions => extensions, :directives => directives)
+    variables(name: name, extensions: extensions, directives: directives)
     action action
   end
 end
@@ -259,16 +258,16 @@ def pecl?
   @pecl ||=
     begin
       # search as a pear first since most 3rd party channels will report pears as pecls!
-      search_args = String.new
-      search_args << " -d preferred_state=#{can_haz(@new_resource, "preferred_state")}"
-      search_args << " search#{expand_channel(can_haz(@new_resource, "channel"))} #{@new_resource.package_name}"
+      search_args = ''
+      search_args << " -d preferred_state=#{can_haz(new_resource, 'preferred_state')}"
+      search_args << " search#{expand_channel(can_haz(new_resource, 'channel'))} #{new_resource.package_name}"
 
-      if    grep_for_version(shell_out(node['php']['pear'] + search_args).stdout, @new_resource.package_name)
+      if    grep_for_version(shell_out(node['php']['pear'] + search_args).stdout, new_resource.package_name)
         false
-      elsif grep_for_version(shell_out(node['php']['pecl'] + search_args).stdout, @new_resource.package_name)
+      elsif grep_for_version(shell_out(node['php']['pecl'] + search_args).stdout, new_resource.package_name)
         true
       else
-        fail "Package #{@new_resource.package_name} not found in either PEAR or PECL."
+        fail "Package #{new_resource.package_name} not found in either PEAR or PECL."
       end
     end
 end
