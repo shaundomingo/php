@@ -10,7 +10,9 @@ class Chef
       end
 
       action :install do
-        package 'php' do
+        package "#{new_resource.name} :install php" do
+          package_name 'php'
+          version new_resource.package_version
           action :install
         end
       end

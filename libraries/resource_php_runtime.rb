@@ -6,6 +6,7 @@ class Chef
       self.resource_name = :php_runtime
       actions :install, :remove
       attribute :version
+      attribute :package_version
     end
   end
 end
