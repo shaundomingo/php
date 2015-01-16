@@ -16,9 +16,8 @@ driver_config:
   availability_zone: <%= ENV['AWS_AVAILABILITY_ZONE'] %>
 
 provisioner:
-  name: chef_solo
-  # require_chef_omnibus: 11.16.4
-  require_chef_omnibus: 12.0.0
+  name: chef_zero
+  require_chef_omnibus: 12.0.3
 
 platforms:
 - name: centos-5.8
@@ -64,14 +63,14 @@ platforms:
 #   run_list:
 #   - recipe[selinux::disabled]
 
-- name: redhat-7.0
-  driver_plugin: ec2
-  driver_config:
-    image_id: ami-a8d369c0
-    username: ec2-user
-    ssh_key: <%= ENV['EC2_SSH_KEY_PATH'] %>
-  run_list:
-  - recipe[selinux::disabled]
+# - name: redhat-7.0
+#   driver_plugin: ec2
+#   driver_config:
+#     image_id: ami-a8d369c0
+#     username: ec2-user
+#     ssh_key: <%= ENV['EC2_SSH_KEY_PATH'] %>
+#   run_list:
+#   - recipe[selinux::disabled]
 
 - name: fedora-20
   driver_plugin: digital_ocean
@@ -159,23 +158,31 @@ platforms:
 #     chef_omnibus_url: https://raw.github.com/test-kitchen/kitchen-joyent/master/scripts/install-smartos.sh
 
 suites:
-  - name: default
+  # - name: default
+  #   run_list:
+  #     - recipe[php::default]
+  #   excludes: ["amazon-201309"]
+  # - name: source
+  #   run_list:
+  #     - recipe[php::source]
+  # - name: module-packages
+  #   run_list:
+  #     - recipe[php::default]
+  #     - recipe[php::module_apc]
+  #     - recipe[php::module_curl]
+  #     - recipe[php::module_fpdf]
+  #     - recipe[php::module_gd]
+  #     - recipe[php::module_ldap]
+  #     - recipe[php::module_memcache]
+  #     - recipe[php::module_mysql]
+  #     - recipe[php::module_pgsql]
+  #     - recipe[php::module_sqlite3]
+  #   excludes: ["amazon-201309", "centos-6.4"]
+
+  - name: runtime51
     run_list:
-      - recipe[php::default]
-    excludes: ["amazon-201309"]
-  - name: source
-    run_list:
-      - recipe[php::source]
-  - name: module-packages
-    run_list:
-      - recipe[php::default]
-      - recipe[php::module_apc]
-      - recipe[php::module_curl]
-      - recipe[php::module_fpdf]
-      - recipe[php::module_gd]
-      - recipe[php::module_ldap]
-      - recipe[php::module_memcache]
-      - recipe[php::module_mysql]
-      - recipe[php::module_pgsql]
-      - recipe[php::module_sqlite3]
-    excludes: ["amazon-201309", "centos-6.4"]
+      - recipe[php_runtime_test]
+    attributes:
+      php:
+       version: '5.1'
+    includes: ['centos-5.8']
