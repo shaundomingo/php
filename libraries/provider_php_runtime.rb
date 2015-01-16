@@ -10,6 +10,9 @@ class Chef
       end
 
       action :install do
+        package 'php' do
+          action :install
+        end
       end
 
       action :remove do
