@@ -9,11 +9,15 @@ class Chef
         true
       end
 
+      include PhpCookbook::Helpers
+
       action :install do
-        package "#{new_resource.name} :install php" do
-          package_name 'php'
-          version new_resource.package_version
-          action :install
+        parsed_runtime_packages.each do |pkg|
+          package "#{new_resource.name} :install #{pkg[:pkg_name]}" do
+            package_name pkg[:pkg_name]
+            version pkg[:pkg_version]
+            action :install
+          end
         end
       end
 

@@ -186,3 +186,24 @@ suites:
       php:
        version: '5.1'
     includes: ['centos-5.8']
+
+  - name: runtime53
+    run_list:
+      - recipe[php_runtime_test]
+    attributes:
+      php:
+       version: '5.3'
+    includes: [
+      'centos-5.8',
+      'centos-6.5',
+    ]
+
+  - name: runtime54
+    run_list:
+      - recipe[php_runtime_test]
+    attributes:
+      php:
+       version: '5.4'
+    includes: [
+      'centos-7.0'
+    ]
