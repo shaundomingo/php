@@ -24,39 +24,55 @@ end
 
 module PhpCookbook
   module Helpers
+    include Chef::DSL::IncludeRecipe
+    
     def parsed_runtime_packages
       return new_resource.packages if new_resource.packages
       runtime_packages
     end
 
     def runtime_packages
-      return [
-        { pkg_name: 'php-common', pkg_version: nil },
-        { pkg_name: 'php-cli', pkg_version: nil }
-      ] if node['platform_family'] == 'rhel' &&
-           node['platform_version'].to_i == 5 &&
-           new_resource.version == '5.1'
-
+      # EL5
       return [
         { pkg_name: 'php53-common', pkg_version: nil },
         { pkg_name: 'php53-cli', pkg_version: nil }
       ] if node['platform_family'] == 'rhel' &&
            node['platform_version'].to_i == 5 &&
-           new_resource.version == '5.3'
+           parsed_version == '5.3'
 
-      return [
+      [
         { pkg_name: 'php-common', pkg_version: nil },
         { pkg_name: 'php-cli', pkg_version: nil }
-      ] if node['platform_family'] == 'rhel' &&
-           node['platform_version'].to_i == 6 &&
-           new_resource.version == '5.3'
+      ]
+    end
 
-      return [
-        { pkg_name: 'php-common', pkg_version: nil },
-        { pkg_name: 'php-cli', pkg_version: nil }
-      ] if node['platform_family'] == 'rhel' &&
-           node['platform_version'].to_i == 7 &&
-           new_resource.version == '5.4'
+    def parsed_version
+      return new_resource.version if new_resource.version
+      return '5.3' if node['platform_family'] == 'rhel' && node['platform_version'].to_i == 5
+      return '5.3' if node['platform_family'] == 'rhel' && node['platform_version'].to_i == 6
+      return '5.4' if node['platform_family'] == 'rhel' && node['platform_version'].to_i == 7
+      return '5.4' if node['platform_family'] == 'fedora' && node['platform_version'].to_i == 20
+      return '5.5' if node['platform_family'] == 'fedora' && node['platform_version'].to_i == 21
+    end
+
+    def configure_package_repositories
+      platfam = node['platform_family']
+      platver = node['platform_version']
+      
+      case parsed_version
+      when '5.4'
+        include_recipe 'yum-remi::remi' if platfam == 'rhel' && platver.to_i == 5
+        include_recipe 'yum-remi::remi' if platfam == 'rhel' && platver.to_i == 6
+      when '5.5'
+        include_recipe 'yum-remi::remi-php55' if platfam == 'rhel' && platver.to_i == 5
+        include_recipe 'yum-remi::remi-php55' if platfam == 'rhel' && platver.to_i == 6
+        include_recipe 'yum-remi::remi-php55' if platfam == 'rhel' && platver.to_i == 7
+      when '5.6'
+        include_recipe 'yum-remi::remi-php56' if platfam == 'rhel' && platver.to_i == 5
+        include_recipe 'yum-remi::remi-php56' if platfam == 'rhel' && platver.to_i == 6
+        include_recipe 'yum-remi::remi-php56' if platfam == 'rhel' && platver.to_i == 7
+        include_recipe 'yum-remi::remi-php56' if platfam == 'fedora' && platver.to_i == 20
+      end
     end
   end
 end

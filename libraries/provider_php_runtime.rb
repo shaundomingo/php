@@ -12,6 +12,11 @@ class Chef
       include PhpCookbook::Helpers
 
       action :install do
+
+        configure_package_repositories
+
+        # iterate over packages..
+        # either supplied as resource parameters, or default values
         parsed_runtime_packages.each do |pkg|
           package "#{new_resource.name} :install #{pkg[:pkg_name]}" do
             package_name pkg[:pkg_name]
@@ -19,6 +24,7 @@ class Chef
             action :install
           end
         end
+        # end :install
       end
 
       action :remove do

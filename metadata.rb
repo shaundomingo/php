@@ -12,6 +12,8 @@ version '1.5.0'
 # depends 'windows'
 # depends 'iis'
 
+depends 'yum-remi'
+
 supports 'centos'
 supports 'redhat'
 supports 'scientific'

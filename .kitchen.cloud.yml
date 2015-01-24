@@ -81,6 +81,15 @@ platforms:
     ssh_key_ids: <%= ENV['DIGITAL_OCEAN_SSH_KEY_IDS'] %>
     ssh_key: <%= ENV['DIGITAL_OCEAN_SSH_KEY_PATH'] %>
 
+- name: fedora-21
+  driver_plugin: digital_ocean
+  driver_config:
+    size: 2gb
+    image: fedora-21-x64
+    region: <%= ENV['DIGITAL_OCEAN_REGION'] %>
+    ssh_key_ids: <%= ENV['DIGITAL_OCEAN_SSH_KEY_IDS'] %>
+    ssh_key: <%= ENV['DIGITAL_OCEAN_SSH_KEY_PATH'] %>
+
 - name: suse-11.3
   driver_plugin: ec2
   driver_config:
@@ -158,27 +167,6 @@ platforms:
 #     chef_omnibus_url: https://raw.github.com/test-kitchen/kitchen-joyent/master/scripts/install-smartos.sh
 
 suites:
-  # - name: default
-  #   run_list:
-  #     - recipe[php::default]
-  #   excludes: ["amazon-201309"]
-  # - name: source
-  #   run_list:
-  #     - recipe[php::source]
-  # - name: module-packages
-  #   run_list:
-  #     - recipe[php::default]
-  #     - recipe[php::module_apc]
-  #     - recipe[php::module_curl]
-  #     - recipe[php::module_fpdf]
-  #     - recipe[php::module_gd]
-  #     - recipe[php::module_ldap]
-  #     - recipe[php::module_memcache]
-  #     - recipe[php::module_mysql]
-  #     - recipe[php::module_pgsql]
-  #     - recipe[php::module_sqlite3]
-  #   excludes: ["amazon-201309", "centos-6.4"]
-
   - name: runtime51
     run_list:
       - recipe[php_runtime_test]
@@ -205,5 +193,49 @@ suites:
       php:
        version: '5.4'
     includes: [
+      'centos-5.8',
+      'centos-6.5',
       'centos-7.0'
     ]
+
+  - name: runtime55
+    run_list:
+      - recipe[php_runtime_test]
+    attributes:
+      php:
+       version: '5.5'
+    includes: [
+      'centos-5.8',
+      'centos-6.5',
+      'centos-7.0',
+      'fedora-20'
+    ]
+
+  - name: runtime56
+    run_list:
+      - recipe[php_runtime_test]
+    attributes:
+      php:
+       version: '5.6'
+    includes: [
+      'centos-5.8',
+      'centos-6.5',
+      'centos-7.0',
+      'fedora-20',
+      'fedora-21',
+    ]
+
+  # #
+  # # service
+  # #
+  # - name: fpm_service51-single
+  #   run_list:
+  #   - recipe[yum-epel]
+  #   - recipe[php_fpm_service_test::single]
+
+  #   includes: [
+  #     'centos-5.8'
+  #   ]
+  #   # attributes:
+  #   #   php:
+  #   #    version: '5.0'
