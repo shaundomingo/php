@@ -25,7 +25,7 @@ end
 module PhpCookbook
   module Helpers
     include Chef::DSL::IncludeRecipe
-    
+
     def parsed_runtime_packages
       return new_resource.packages if new_resource.packages
       runtime_packages
@@ -58,7 +58,7 @@ module PhpCookbook
     def configure_package_repositories
       platfam = node['platform_family']
       platver = node['platform_version']
-      
+
       case parsed_version
       when '5.4'
         include_recipe 'yum-remi::remi' if platfam == 'rhel' && platver.to_i == 5
