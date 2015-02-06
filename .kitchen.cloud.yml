@@ -185,6 +185,9 @@ suites:
       'amazon-2014.09',
       'centos-5.8',
       'centos-6.5',
+      'ubuntu-10.04',
+      'ubuntu-12.04',
+      'omnios-151006'
     ]
 
   - name: runtime54
@@ -197,7 +200,8 @@ suites:
       'amazon-2014.09',
       'centos-5.8',
       'centos-6.5',
-      'centos-7.0'
+      'centos-7.0',
+      'debian-7.0'
     ]
 
   - name: runtime55
@@ -211,7 +215,8 @@ suites:
       'centos-5.8',
       'centos-6.5',
       'centos-7.0',
-      'fedora-20'
+      'fedora-20',
+      'ubuntu-14.04'
     ]
 
   - name: runtime56

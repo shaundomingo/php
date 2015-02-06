@@ -37,20 +37,20 @@ module PhpCookbook
         { pkg_name: 'php-common', pkg_version: nil },
         { pkg_name: 'php-cli', pkg_version: nil }
       ] if node['platform'] == 'amazon' &&
-        parsed_version == '5.3'    
-      
+           parsed_version == '5.3'
+
       return [
         { pkg_name: 'php54-common', pkg_version: nil },
         { pkg_name: 'php54-cli', pkg_version: nil }
       ] if node['platform'] == 'amazon' &&
-        parsed_version == '5.4'
+           parsed_version == '5.4'
 
       return [
         { pkg_name: 'php55-common', pkg_version: nil },
         { pkg_name: 'php55-cli', pkg_version: nil }
       ] if node['platform'] == 'amazon' &&
-        parsed_version == '5.5'
-      
+           parsed_version == '5.5'
+
       # rhel
       return [
         { pkg_name: 'php53-common', pkg_version: nil },
@@ -58,15 +58,55 @@ module PhpCookbook
       ] if node['platform_family'] == 'rhel' &&
            node['platform_version'].to_i == 5 &&
            parsed_version == '5.3'
-      [
+      return [
         { pkg_name: 'php-common', pkg_version: nil },
         { pkg_name: 'php-cli', pkg_version: nil }
-      ]
+      ] if node['platform_family'] == 'rhel'
+
+      # fedora
+      return [
+        { pkg_name: 'php-common', pkg_version: nil },
+        { pkg_name: 'php-cli', pkg_version: nil }
+      ] if node['platform_family'] == 'fedora'
+
+      # debian
+      return [
+        { pkg_name: 'php5', pkg_version: nil },
+        { pkg_name: 'php5-cli', pkg_version: nil }
+      ] if node['platform'] == 'debian' &&
+           node['platform_version'].to_i == 7 &&
+           parsed_version == '5.4'
+
+      # ubuntu
+      return [
+        { pkg_name: 'php5', pkg_version: nil },
+        { pkg_name: 'php5-cli', pkg_version: nil }
+      ] if node['platform'] == 'ubuntu' &&
+           node['platform_version'].to_f == 10.04 &&
+           parsed_version == '5.3'
+
+      return [
+        { pkg_name: 'php5', pkg_version: nil },
+        { pkg_name: 'php5-cli', pkg_version: nil }
+      ] if node['platform'] == 'ubuntu' &&
+           node['platform_version'].to_f == 12.04 &&
+           parsed_version == '5.3'
+
+      return [
+        { pkg_name: 'php5', pkg_version: nil },
+        { pkg_name: 'php5-cli', pkg_version: nil }
+      ] if node['platform'] == 'ubuntu' &&
+           node['platform_version'].to_f == 14.04 &&
+           parsed_version == '5.5'
     end
 
     def parsed_version
       return new_resource.version if new_resource.version
       return '5.3' if node['platform'] == 'amazon'
+      return '5.4' if node['platform'] == 'debian'
+      return '5.3' if node['platform'] == 'ubuntu' && node['platform_version'].to_f == 10.04
+      return '5.3' if node['platform'] == 'ubuntu' && node['platform_version'].to_f == 12.04
+      return '5.5' if node['platform'] == 'ubuntu' && node['platform_version'].to_f == 14.04
       return '5.3' if node['platform_family'] == 'rhel' && node['platform_version'].to_i == 5
       return '5.3' if node['platform_family'] == 'rhel' && node['platform_version'].to_i == 6
       return '5.4' if node['platform_family'] == 'rhel' && node['platform_version'].to_i == 7
