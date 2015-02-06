@@ -167,17 +167,17 @@ platforms:
 #     chef_omnibus_url: https://raw.github.com/test-kitchen/kitchen-joyent/master/scripts/install-smartos.sh
 
 suites:
-  - name: runtime51
+  - name: runtime51-package
     run_list:
-      - recipe[php_runtime_test]
+      - recipe[php_runtime_test::package]
     attributes:
       php:
        version: '5.1'
     includes: ['centos-5.8']
 
-  - name: runtime53
+  - name: runtime53-package
     run_list:
-      - recipe[php_runtime_test]
+      - recipe[php_runtime_test::package]
     attributes:
       php:
        version: '5.3'
@@ -190,9 +190,9 @@ suites:
       'omnios-151006'
     ]
 
-  - name: runtime54
+  - name: runtime54-package
     run_list:
-      - recipe[php_runtime_test]
+      - recipe[php_runtime_test::package]
     attributes:
       php:
        version: '5.4'
@@ -204,9 +204,9 @@ suites:
       'debian-7.0'
     ]
 
-  - name: runtime55
+  - name: runtime55-package
     run_list:
-      - recipe[php_runtime_test]
+      - recipe[php_runtime_test::package]
     attributes:
       php:
        version: '5.5'
@@ -219,9 +219,9 @@ suites:
       'ubuntu-14.04'
     ]
 
-  - name: runtime56
+  - name: runtime56-package
     run_list:
-      - recipe[php_runtime_test]
+      - recipe[php_runtime_test::package]
     attributes:
       php:
        version: '5.6'

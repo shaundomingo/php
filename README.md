@@ -23,8 +23,9 @@ Platform Support
 ----------------
 The following platforms have been tested with Test Kitchen:
 
-```
 Package Provider
+----------------
+```
 |--------------+-----+-----+-----+-----+-----|
 |              | 5.1 | 5.3 | 5.4 | 5.5 | 5.6 |
 |--------------+-----+-----+-----+-----+-----|
