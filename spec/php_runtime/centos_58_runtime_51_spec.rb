@@ -19,15 +19,14 @@ describe 'php_runtime_test::package' do
   end
 
   context 'stepping into php_runtime[default]' do
-    # it 'installs package[default :install php-cli]' do
-    #   require 'pry'; binding.pry
-    #   expect(centos_58_runtime_51).to install_package('default :install php-cli')
-    #     .with(package_name: 'php-cli', version: nil)
-    # end
+    it 'installs package[default :install php-cli]' do
+      expect(centos_58_runtime_51).to install_package('default :install php-cli')
+        .with(package_name: 'php-cli', version: nil)
+    end
 
-    # it 'installs package[default :install php-common]' do
-    #   expect(centos_58_runtime_51).to install_package('default :install php-common')
-    #     .with(package_name: 'php-common', version: nil)
-    # end
+    it 'installs package[default :install php-common]' do
+      expect(centos_58_runtime_51).to install_package('default :install php-common')
+        .with(package_name: 'php-common', version: nil)
+    end
   end
 end
