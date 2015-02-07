@@ -1,18 +1,18 @@
 name 'php'
-maintainer 'Opscode, Inc.'
-maintainer_email 'cookbooks@opscode.com'
+maintainer 'Chef Software, Inc'
+maintainer_email 'cookbooks@chef.io'
 license 'Apache 2.0'
-description 'Installs and maintains php and php modules'
+description 'manages php and php modules'
 version '1.5.0'
 
-# depends 'build-essential'
+depends 'yum-remi'
+depends 'build-essential'
+depends 'yum-epel'
+
 # depends 'xml'
 # depends 'mysql'
-# depends 'yum-epel'
 # depends 'windows'
 # depends 'iis'
-
-depends 'yum-remi'
 
 supports 'centos'
 supports 'redhat'

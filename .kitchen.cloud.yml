@@ -167,6 +167,9 @@ platforms:
 #     chef_omnibus_url: https://raw.github.com/test-kitchen/kitchen-joyent/master/scripts/install-smartos.sh
 
 suites:
+  ##################
+  # package provider
+  ##################
   - name: runtime51-package
     run_list:
       - recipe[php_runtime_test::package]
@@ -232,6 +235,14 @@ suites:
       'fedora-20',
       'fedora-21',
     ]
+
+  ##################
+  # source provider
+  ##################
+  - name: runtime-source
+    run_list:
+      - recipe[php_runtime_test::source]
+    includes: ['centos-5.8']
 
   # #
   # # service
