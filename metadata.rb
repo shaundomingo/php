@@ -8,9 +8,10 @@ version '1.5.0'
 depends 'yum-remi'
 depends 'build-essential'
 depends 'yum-epel'
+depends 'mysql'
 
 # depends 'xml'
-# depends 'mysql'
+
 # depends 'windows'
 # depends 'iis'
 

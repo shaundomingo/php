@@ -21,13 +21,14 @@
 module PhpCookbook
   module Helpers
     include Chef::DSL::IncludeRecipe
-
+    
     def cache_path
       Chef::Config[:file_cache_path]
     end
-    
+
     def parsed_php_home
-      '/opt/php-instance-1'
+      return new_resource.php_home if new_resource.php_home
+      "/opt/#{php_name}"
     end
 
     def parsed_version
@@ -56,7 +57,11 @@ module PhpCookbook
           libt1-dev
         ))
     end
-    
+
+    def php_name
+      "php-#{new_resource.instance}"
+    end
+
     def lib_dir
       return node['kernel']['machine'] =~ /x86_64/ ? 'lib64' : 'lib' if node['platform_family'] == 'rhel'
       'lib'
@@ -64,26 +69,26 @@ module PhpCookbook
 
     def conf_dir
       return '/etc' if %w(rhel fedora).include? node['platform_family']
-      return '/etc/php5/cli' if %w(debian ubuntu suse).include? node['platform_family'] 
+      return '/etc/php5/cli' if %w(debian ubuntu suse).include? node['platform_family']
     end
 
     def ext_conf_dir
       return '/etc/php.d' if %w(rhel fedora).include? node['platform_family']
-      return '/etc/php5/conf.d' if %w(debian ubuntu suse).include? node['platform_family'] 
+      return '/etc/php5/conf.d' if %w(debian ubuntu suse).include? node['platform_family']
     end
 
     def fpm_user
       return 'nobody' if %w(rhel fedora).include? node['platform_family']
       return 'www-data' if %w(debian ubuntu).include? node['platform_family']
-      return 'wwwrun' if %w(suse).include? node['platform_family'] 
+      return 'wwwrun' if %w(suse).include? node['platform_family']
     end
 
     def fpm_group
       return 'nobody' if %w(rhel fedora).include? node['platform_family']
       return 'www-data' if %w(debian ubuntu).include? node['platform_family']
-      return 'www' if %w(suse).include? node['platform_family'] 
+      return 'www' if %w(suse).include? node['platform_family']
     end
-    
+
     def parsed_configure_options
       return new_resource.configure_options if new_resource.configure_options
       # FIXME: conf_dir
@@ -132,7 +137,7 @@ module PhpCookbook
 
     def parsed_mirror_url
       return new_resource.mirror_url if new_resource.mirror_url
-      "http://us1.php.net/get/php-#{parsed_version}.tar.bz2/from/this/mirror"
+      "http://us1.php.net/get/php-#{parsed_version}.tar.gz/from/this/mirror"
     end
 
     def parsed_source_url
@@ -143,7 +148,9 @@ module PhpCookbook
 
     def parsed_source_checksum
       return new_resource.source_checksum if new_resource.source_checksum
-      '576f9001b612f5ddc22f447311bbec321e2c959b6a52259d664c4ba04ef044f1'
+      return 'f67c480bcf2f6f703ec8d8a772540f4a518f766b08d634d7a919402c13a636cf' if parsed_version == '5.6.5'
+      return '45adba5b4d2519f6174b85fd5b07a77389f397603d84084bdd26c44b3d7dc8af' if parsed_version == '5.5.21'
+      return '6bf3b3ebefa600cfb6dd7f2678f23b17a958e82e8ce2d012286818d7c36dfd31' if parsed_version == '5.4.37'
       # FIXME: look this up based on what?
     end
 

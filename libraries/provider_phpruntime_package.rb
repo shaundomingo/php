@@ -5,7 +5,7 @@ class Chef
     class PhpRuntime
       class Package < Chef::Provider::PhpRuntime
         action :install do
-          configure_package_repositories
+          configure_package_repositories if new_resource.manage_package_repos
 
           # iterate over packages..
           # either supplied as resource parameters, or default values
@@ -16,11 +16,29 @@ class Chef
               action :install
             end
           end
-          # end :install
-        end
+
+          directory "#{new_resource.name} : install #{conf_dir}" do
+            path conf_dir
+            owner 'root'
+            group 'root'
+            mode '0755'
+            action :create
+          end
+
+          template "#{new_resource.name} : install #{conf_dir}/php.ini" do
+            path "#{conf_dir}/php.ini"
+            source 'php.ini.erb'
+            cookbook 'php'
+            owner 'root'
+            group 'root'
+            mode '0644'
+            variables(directives: new_resource.directives)
+          end
+        end # action :install
 
         action :remove do
-        end
+        end # action :remove
+        
       end
     end
   end
