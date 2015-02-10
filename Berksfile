@@ -7,6 +7,7 @@ group :integration do
   cookbook 'yum-epel'
 end
 
+cookbook 'mysql', path: '/Users/someara/src/opscode-cookbooks/mysql'
 cookbook 'yum-remi', path: '/Users/someara/src/opscode-cookbooks/yum-remi'
 cookbook 'php_runtime_test', path: 'test/fixtures/cookbooks/php_runtime_test'
 cookbook 'php_fpm_service_test', path: 'test/fixtures/cookbooks/php_fpm_service_test'

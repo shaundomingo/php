@@ -64,7 +64,6 @@ action :remove do
       Chef::Log.info("Removing #{new_resource}")
       remove_package(@current_resource.package_name, new_resource.version)
     end
-  else
   end
 end
 

@@ -21,7 +21,7 @@
 module PhpCookbook
   module Helpers
     include Chef::DSL::IncludeRecipe
-    
+
     def cache_path
       Chef::Config[:file_cache_path]
     end
@@ -39,7 +39,7 @@ module PhpCookbook
     def parsed_build_pkgdeps
       return new_resource.build_pkgdeps if new_resource.build_pkgdeps
       value_for_platform_family(
-        %w(rhel fedora) => %w(
+        %w(rhel) => %w(
           bzip2-devel libc-client-devel
           curl-devel freetype-devel
           gmp-devel libjpeg-devel
@@ -48,13 +48,23 @@ module PhpCookbook
           t1lib-devel mhash-devel
           libxml2-devel
         ),
+        %w(fedora) => %w(
+          bzip2-devel libc-client-devel
+          curl-devel freetype-devel
+          gmp-devel libjpeg-devel
+          krb5-devel libmcrypt-devel
+          libpng-devel openssl-devel
+          t1lib-devel mhash-devel
+          libxml2-devel uw-imap-static
+          uw-imap-devel re2c
+        ),
         %w(debian ubuntu) => %w(
           libbz2-dev libc-client2007e-dev
           libcurl4-gnutls-dev libfreetype6-dev
           libgmp3-dev libjpeg62-dev
           libkrb5-dev libmcrypt-dev
           libpng12-dev libssl-dev
-          libt1-dev
+          libt1-dev re2c libxml2-dev
         ))
     end
 
@@ -123,7 +133,6 @@ module PhpCookbook
         --enable-sockets
         --enable-soap
         --with-xmlrpc
-        --with-libevent-dir
         --with-mcrypt
         --enable-mbstring
         --with-t1lib

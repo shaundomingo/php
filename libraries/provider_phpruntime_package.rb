@@ -38,7 +38,6 @@ class Chef
 
         action :remove do
         end # action :remove
-        
       end
     end
   end
