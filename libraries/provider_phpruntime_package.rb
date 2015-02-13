@@ -4,9 +4,17 @@ class Chef
   class Provider
     class PhpRuntime
       class Package < Chef::Provider::PhpRuntime
+
         action :install do
           configure_package_repositories if new_resource.manage_package_repos
-
+          
+          if el5_php53?
+          else
+            package 'php-pear' do
+              action :install
+            end
+          end
+          
           # iterate over packages..
           # either supplied as resource parameters, or default values
           parsed_runtime_packages.each do |pkg|
@@ -17,7 +25,7 @@ class Chef
             end
           end
 
-          directory "#{new_resource.name} : install #{conf_dir}" do
+          directory "#{new_resource.name} :install #{conf_dir}" do
             path conf_dir
             owner 'root'
             group 'root'
@@ -25,7 +33,7 @@ class Chef
             action :create
           end
 
-          template "#{new_resource.name} : install #{conf_dir}/php.ini" do
+          template "#{new_resource.name} :install #{conf_dir}/php.ini" do
             path "#{conf_dir}/php.ini"
             source 'php.ini.erb'
             cookbook 'php'

@@ -22,13 +22,26 @@ module PhpCookbook
   module Helpers
     include Chef::DSL::IncludeRecipe
 
+    def el5_php53?
+      if node['platform_family'] == 'rhel' &&  node['platform_version'].to_i == 5 && new_resource.version == '5.3'
+        return true
+      else
+        return false
+      end
+    end
+
     def cache_path
       Chef::Config[:file_cache_path]
     end
 
     def parsed_php_home
       return new_resource.php_home if new_resource.php_home
-      "/opt/#{php_name}"
+      return '/' if self.class == 'Chef::Provider::PhpRuntime::Package'
+      return "/opt/#{php_name}" if self.class == 'Chef::Provider::PhpRuntime::Source'
+    end
+
+    def php_bin
+      "#{parsed_php_home}/bin/php"
     end
 
     def parsed_version
@@ -101,10 +114,6 @@ module PhpCookbook
 
     def parsed_configure_options
       return new_resource.configure_options if new_resource.configure_options
-      # FIXME: conf_dir
-      # FIXME: ext_conf_dir
-      # FIXME: fpm_user
-      # FIXME: fpm_group
       %W(
         --prefix=#{parsed_php_home}
         --with-libdir=#{lib_dir}
