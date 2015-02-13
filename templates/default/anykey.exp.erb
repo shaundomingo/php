@@ -1,0 +1,8 @@
+#!/usr/bin/expect -f
+
+set timeout -1
+spawn php <%= @cache_path %>/go-pear.phar
+match_max 100000
+expect "Enter to continue: "
+send -- "\r"
+expect eof
