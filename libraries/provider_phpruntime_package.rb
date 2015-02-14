@@ -4,7 +4,6 @@ class Chef
   class Provider
     class PhpRuntime
       class Package < Chef::Provider::PhpRuntime
-
         action :install do
           configure_package_repositories if new_resource.manage_package_repos
 
@@ -21,7 +20,7 @@ class Chef
           end
 
           if el5_php53?
-            package "expect" do
+            package 'expect' do
               action :install
             end
 
