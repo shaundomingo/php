@@ -22,13 +22,12 @@
 require 'chef/mixin/shell_out'
 require 'chef/mixin/language'
 include Chef::Mixin::ShellOut
+include PhpCookbook::Helpers
 
 class Chef
   class Provider
     class PhpPearChannel < Chef::Provider::LWRPBase
       use_inline_resources
-
-      include PhpCookbook::Helpers
 
       def whyrun_supported?
         true
@@ -36,7 +35,7 @@ class Chef
 
       action :discover do
         execute "Discovering pear channel #{new_resource.channel_name}" do
-          command "#{php_bin} channel-discover #{new_resource.channel_name}"
+          command "#{pear_bin} channel-discover #{new_resource.channel_name}"
           not_if { channel_exists? }
           action :run
         end
@@ -44,7 +43,7 @@ class Chef
 
       action :add do
         execute "Adding pear channel #{new_resource} from #{new_resource.channel_xml}" do
-          command "#{php_bin} channel-add #{new_resource.channel_xml}"
+          command "#{pear_bin} channel-add #{new_resource.channel_xml}"
           not_if { channel_exists? }
           action :run
         end
@@ -54,7 +53,7 @@ class Chef
         if channel_exists?
           update_needed = false
           begin
-            update_needed = true if shell_out("#{php_bin} search -c #{new_resource.channel_name} NNNNNN").stdout =~ /channel-update/
+            update_needed = true if shell_out("#{pear_bin} search -c #{new_resource.channel_name} NNNNNN").stdout =~ /channel-update/
           rescue Chef::Exceptions::CommandTimeout
             # CentOS can hang on 'pear search' if a channel needs updating
             Chef::Log.info("Timed out checking if channel-update needed...forcing update of pear channel #{new_resource.channel_name}")
@@ -65,7 +64,7 @@ class Chef
             description = "update pear channel #{new_resource}"
             converge_by(description) do
               Chef::Log.info("Updating pear channel #{new_resource}")
-              shell_out!("#{php_bin} channel-update #{new_resource.channel_name}")
+              shell_out!("#{pear_bin} channel-update #{new_resource.channel_name}")
             end
           end
         end

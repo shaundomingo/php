@@ -5,6 +5,6 @@ php_runtime 'default' do
   action :install
 end
 
-php_pear_channel 'pear.php.net' do
+php_pear_channel 'pear.horde.org' do
   action :discover
 end

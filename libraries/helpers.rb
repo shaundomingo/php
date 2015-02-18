@@ -25,14 +25,14 @@ module PhpCookbook
     def cache_path
       Chef::Config[:file_cache_path]
     end
-    
+
     def channel_exists?
-      shell_out!("#{php_bin} channel-info #{current_resource.channel_name}")
-      true
+      channel_list = shell_out!("#{pear_bin} list-channels", env: nil, returns: [0, 1])
+      return true if channel_list.stdout.match(/^#{new_resource.channel_name}/)
     rescue Mixlib::ShellOut::ShellCommandFailed
       false
     end
-    
+
     def el5_php53?
       if node['platform_family'] == 'rhel' &&  node['platform_version'].to_i == 5 && new_resource.version == '5.3'
         return true
@@ -48,7 +48,11 @@ module PhpCookbook
     end
 
     def php_bin
-      "#{parsed_php_home}/bin/php"
+      "#{parsed_php_home}/usr/bin/php"
+    end
+
+    def pear_bin
+      "#{parsed_php_home}/usr/bin/pear"
     end
 
     def parsed_version
