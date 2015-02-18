@@ -22,16 +22,23 @@ module PhpCookbook
   module Helpers
     include Chef::DSL::IncludeRecipe
 
+    def cache_path
+      Chef::Config[:file_cache_path]
+    end
+    
+    def channel_exists?
+      shell_out!("#{php_bin} channel-info #{current_resource.channel_name}")
+      true
+    rescue Mixlib::ShellOut::ShellCommandFailed
+      false
+    end
+    
     def el5_php53?
       if node['platform_family'] == 'rhel' &&  node['platform_version'].to_i == 5 && new_resource.version == '5.3'
         return true
       else
         return false
       end
-    end
-
-    def cache_path
-      Chef::Config[:file_cache_path]
     end
 
     def parsed_php_home

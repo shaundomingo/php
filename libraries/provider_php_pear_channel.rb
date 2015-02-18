@@ -28,6 +28,8 @@ class Chef
     class PhpPearChannel < Chef::Provider::LWRPBase
       use_inline_resources
 
+      include PhpCookbook::Helpers
+
       def whyrun_supported?
         true
       end
@@ -75,15 +77,6 @@ class Chef
           not_if {  channel_exists? }
           action :run
         end
-      end
-
-      private
-
-      def channel_exists?
-        shell_out!("#{php_bin} channel-info #{current_resource.channel_name}")
-        true
-      rescue Mixlib::ShellOut::ShellCommandFailed
-        false
       end
     end
   end

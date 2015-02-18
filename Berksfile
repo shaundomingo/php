@@ -10,3 +10,4 @@ end
 cookbook 'mysql', path: '/Users/someara/src/opscode-cookbooks/mysql'
 cookbook 'yum-remi', path: '/Users/someara/src/opscode-cookbooks/yum-remi'
 cookbook 'php_runtime_test', path: 'test/fixtures/cookbooks/php_runtime_test'
+cookbook 'pear_channel_test', path: 'test/fixtures/cookbooks/pear_channel_test'

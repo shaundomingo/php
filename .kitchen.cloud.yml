@@ -255,17 +255,12 @@ suites:
   #     'ubuntu-14.04'
   #   ]
 
-  # #
-  # # service
-  # #
-  # - name: fpm_service51-single
-  #   run_list:
-  #   - recipe[yum-epel]
-  #   - recipe[php_fpm_service_test::single]
-
-  #   includes: [
-  #     'centos-5.8'
-  #   ]
-  #   # attributes:
-  #   #   php:
-  #   #    version: '5.0'
+  - name: pear_channel
+    run_list:
+      - recipe[pear_channel_test]
+    attributes:
+      php:
+       version: '5.1'
+    includes: [
+      'centos-5.8'
+    ]
