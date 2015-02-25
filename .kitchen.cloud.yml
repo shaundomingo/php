@@ -261,10 +261,18 @@ suites:
 
   - name: pear-channel
     run_list:
-      - recipe[pear_channel_test]
+      - recipe[php_pear_channel_test]
     attributes:
       php:
        version: '5.1'
     includes: [
-      'centos-5.8'
+      'centos-5.8',
+      'centos-6.5',
+      'centos-7.0',
+      'fedora-20',
+      'fedora-21',
+      'debian-7.0',
+      'ubuntu-10.04',
+      'ubuntu-12.04',
+      'ubuntu-14.04'
     ]

@@ -55,11 +55,6 @@ module PhpCookbook
       "#{parsed_php_home}/usr/bin/pear"
     end
 
-    def parsed_version
-      return new_resource.version if new_resource.version
-      # put default versions here
-    end
-
     def parsed_build_pkgdeps
       return new_resource.build_pkgdeps if new_resource.build_pkgdeps
       value_for_platform_family(
