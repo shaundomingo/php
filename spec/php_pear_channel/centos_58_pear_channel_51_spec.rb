@@ -18,23 +18,30 @@ describe 'php_pear_channel_test::default' do
     Mixlib::ShellOut.stub(:new).and_return(shellout)
   end
 
-  context 'compiling the test recipe' do
-    it 'creates php_pear_channel[default]' do
-      expect(Mixlib::ShellOut).to receive(:new).with('/usr/bin/pear list-channels', returns: [0, 1])
-      expect(centos_58_pear_channel_51).to install_php_pear_channel('default')
-        .with(version: '5.1')
-    end
+  # require 'pry'; binding.pry
+
+  it 'builds the correct command' do
+    expect(Mixlib::ShellOut).to receive(:new).with('/usr/bin/pear list-channels', returns: [0, 2])
+    expect(shellout).to receive(:live_stream=).and_return(nil)
+    expect(dummy_class.new.channel_exists?).to be_false
   end
 
-  # context 'stepping into php_pear_channel[default]' do
-  #   it 'installs package[default :install php-cli]' do
-  #     expect(centos_58_pear_channel_51).to install_package('default :install php-cli')
-  #       .with(package_name: 'php-cli', version: nil)
-  #   end
+  context 'compiling the test recipe' do
+    # it 'creates php_pear_channel[default]' do
+    #   expect(centos_58_pear_channel_51).to install_php_pear_channel('default')
+    #     .with(version: '5.1')
+    # end
+  end
 
-  #   it 'installs package[default :install php-common]' do
-  #     expect(centos_58_pear_channel_51).to install_package('default :install php-common')
-  #       .with(package_name: 'php-common', version: nil)
-  #   end
-  # end
+  context 'stepping into php_pear_channel[default]' do
+    #   it 'installs package[default :install php-cli]' do
+    #     expect(centos_58_pear_channel_51).to install_package('default :install php-cli')
+    #       .with(package_name: 'php-cli', version: nil)
+    #   end
+
+    #   it 'installs package[default :install php-common]' do
+    #     expect(centos_58_pear_channel_51).to install_package('default :install php-common')
+    #       .with(package_name: 'php-common', version: nil)
+    #   end
+  end
 end
