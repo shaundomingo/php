@@ -243,6 +243,7 @@ module PhpCookbook
       ] if node['platform_family'] == 'rhel' &&
            node['platform_version'].to_i == 5 &&
            parsed_version == '5.3'
+
       return [
         { pkg_name: 'php-common', pkg_version: nil },
         { pkg_name: 'php-cli', pkg_version: nil }

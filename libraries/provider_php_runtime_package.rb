@@ -9,12 +9,9 @@ class Chef
 
           cache_path = Chef::Config[:file_cache_path]
 
+          # require 'pry'; binding.pry if node['platform'] == 'ubuntu'
+
           # iterate over packages..
-          # either supplied as resource parameters, or default values
-
-          # require 'pry'; binding.pry
-          # require 'pry'; binding.pry if node['platform_family'] == 'debian'
-
           parsed_runtime_packages.each do |pkg|
             package "#{new_resource.name} :install #{pkg[:pkg_name]}" do
               package_name pkg[:pkg_name]

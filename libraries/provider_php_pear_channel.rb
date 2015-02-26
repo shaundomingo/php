@@ -40,7 +40,7 @@ class Chef
           action :run
         end
       end
- 
+
       action :add do
         execute "Adding pear channel #{new_resource} from #{new_resource.channel_xml}" do
           command "#{pear_bin} channel-add #{new_resource.channel_xml}"
@@ -67,7 +67,7 @@ class Chef
               shell_out!("#{pear_bin} channel-update #{new_resource.channel_name}")
             end
           end
-          
+
         end
       end
 

@@ -1,13 +1,13 @@
 require 'spec_helper'
 
 describe 'php_pear_channel_test::default' do
-  cached(:centos_58_pear_channel_51) do
+  cached(:ubuntu_1004_pear_channel_53) do
     ChefSpec::ServerRunner.new(
-      platform: 'centos',
-      version: '5.8',
+      platform: 'ubuntu',
+      version: '10.04',
       step_into: 'php_pear_channel'
       ) do |node|
-      node.set['php']['version'] = '5.1'
+      node.set['php']['version'] = '5.3'
     end.converge('php_pear_channel_test::default')
   end
 
@@ -17,7 +17,7 @@ describe 'php_pear_channel_test::default' do
 
   context 'compiling the test recipe' do
     it 'creates php_pear_channel[pear.horde.org]' do
-      expect(centos_58_pear_channel_51).to discover_php_pear_channel('pear.horde.org')
+      expect(ubuntu_1004_pear_channel_53).to discover_php_pear_channel('pear.horde.org')
     end
   end
 
