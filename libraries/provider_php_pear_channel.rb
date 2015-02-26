@@ -36,15 +36,15 @@ class Chef
       action :discover do
         execute "Discovering pear channel #{new_resource.channel_name}" do
           command "#{pear_bin} channel-discover #{new_resource.channel_name}"
-          not_if { channel_exists? }
+          not_if "#{pear_bin} list-channels | grep ^#{new_resource.channel_name}"
           action :run
         end
       end
-
+ 
       action :add do
         execute "Adding pear channel #{new_resource} from #{new_resource.channel_xml}" do
           command "#{pear_bin} channel-add #{new_resource.channel_xml}"
-          not_if { channel_exists? }
+          not_if "#{pear_bin} list-channels | grep ^#{new_resource.channel_name}"
           action :run
         end
       end
@@ -67,6 +67,7 @@ class Chef
               shell_out!("#{pear_bin} channel-update #{new_resource.channel_name}")
             end
           end
+          
         end
       end
 

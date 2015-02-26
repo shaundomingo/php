@@ -7,4 +7,8 @@ if defined?(ChefSpec)
   def remove_php_runtime(resource_name)
     ChefSpec::Matchers::ResourceMatcher.new(:php_runtime, :remove, resource_name)
   end
+
+  def discover_php_pear_channel(resource_name)
+    ChefSpec::Matchers::ResourceMatcher.new(:php_pear_channel, :discover, resource_name)
+  end
 end
