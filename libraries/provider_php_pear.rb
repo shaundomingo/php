@@ -21,9 +21,13 @@ require 'chef/mixin/shell_out'
 require 'chef/mixin/language'
 include Chef::Mixin::ShellOut
 
+# include methods from libraries/helpers.rb
+include PhpCookbook::Helpers
+
 class Chef
   class Provider
     class PhpPear < Chef::Provider::LWRPBase
+      # methods from LWRPBase
       def whyrun_supported?
         true
       end
@@ -98,10 +102,12 @@ class Chef
       def load_current_resource
         @current_resource = Chef::Resource::PhpPear.new(new_resource.name)
         @current_resource.package_name(new_resource.package_name)
-        @bin = node['php']['pear']
+
+        # require 'pry'; binding.pry
+        @bin = pear_bin
         if pecl?
           Chef::Log.debug("#{new_resource} smells like a pecl...installing package in Pecl mode.")
-          @bin = node['php']['pecl']
+          @bin = pecl_bin
         end
         Chef::Log.debug("#{@current_resource}: Installed version: #{current_installed_version} Candidate version: #{candidate_version}")
 
@@ -189,7 +195,7 @@ class Chef
         @extension_dir ||= begin
                              # Consider using "pecl config-get ext_dir". It is more cross-platform.
                              # p = shell_out("php-config --extension-dir")
-                             p = shell_out("#{node['php']['pecl']} config-get ext_dir")
+                             p = shell_out("#{pecl_bin} config-get ext_dir")
                              p.stdout.strip
                            end
       end
@@ -259,9 +265,9 @@ class Chef
             search_args << " -d preferred_state=#{can_haz(new_resource, 'preferred_state')}"
             search_args << " search#{expand_channel(can_haz(new_resource, 'channel'))} #{new_resource.package_name}"
 
-            if    grep_for_version(shell_out(node['php']['pear'] + search_args).stdout, new_resource.package_name)
+            if    grep_for_version(shell_out(pear_bin + search_args).stdout, new_resource.package_name)
               false
-            elsif grep_for_version(shell_out(node['php']['pecl'] + search_args).stdout, new_resource.package_name)
+            elsif grep_for_version(shell_out(pecl_bin + search_args).stdout, new_resource.package_name)
               true
             else
               fail "Package #{new_resource.package_name} not found in either PEAR or PECL."

@@ -323,3 +323,13 @@ suites:
       'fedora-20',
       'fedora-21',
     ]
+
+  - name: pear-package51
+    run_list:
+      - recipe[php_pear_test]
+    attributes:
+      php:
+       version: '5.1'
+    includes: [
+      'centos-5.8',
+    ]

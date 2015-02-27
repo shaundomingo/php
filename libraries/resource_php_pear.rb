@@ -25,6 +25,7 @@ class Chef
       actions :install, :upgrade, :remove, :purge
 
       attribute :package_name, kind_of: String, name_attribute: true
+      attribute :php_home, default: nil
       attribute :version, default: nil
       attribute :channel, kind_of: String
       attribute :options, kind_of: String
