@@ -17,12 +17,15 @@
 # limitations under the License.
 #
 
-# include methods from libraries/helpers.rb
+# methods from libraries/helpers.rb
 include PhpCookbook::Helpers
 
 class Chef
   class Provider
     class PhpPear < Chef::Provider::LWRPBase
+      # boiler plate
+      use_inline_resources
+
       def whyrun_supported?
         true
       end
@@ -41,8 +44,7 @@ class Chef
         ruby_block "#{new_resource.name} :upgrade #{new_resource.package_name}" do
           block { upgrade_pear }
           not_if { pear_at_desired_version? }
-          not_if { upgrade_available? }
-          only_if {}
+          only_if { upgrade_available? }
           action :run
         end
       end

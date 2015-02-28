@@ -22,6 +22,34 @@ module PhpCookbook
   module Helpers
     include Chef::DSL::IncludeRecipe
 
+    ###############################
+    # php_pear
+    ###############################
+    def install_pear
+    end
+
+    def pear_installed?
+    end
+
+    def upgrade_pear
+    end
+
+    def pear_at_desired_version?
+    end
+
+    def upgrade_available?
+    end
+
+    def remove_pear
+    end
+
+    def purge_pear
+    end
+
+    ###############################
+    # common, runtime, pear_channel
+    ###############################
+
     def cache_path
       Chef::Config[:file_cache_path]
     end
