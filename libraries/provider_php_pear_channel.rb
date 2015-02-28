@@ -34,6 +34,7 @@ class Chef
       end
 
       action :discover do
+        # FIXME: Document where this is looking for channel lists
         execute "Discovering pear channel #{new_resource.channel_name}" do
           command "#{pear_bin} channel-discover #{new_resource.channel_name}"
           not_if "#{pear_bin} list-channels | grep ^#{new_resource.channel_name}"
@@ -42,6 +43,7 @@ class Chef
       end
 
       action :add do
+        # FIXME: Document how to get this XML
         execute "Adding pear channel #{new_resource} from #{new_resource.channel_xml}" do
           command "#{pear_bin} channel-add #{new_resource.channel_xml}"
           not_if "#{pear_bin} list-channels | grep ^#{new_resource.channel_name}"
@@ -50,6 +52,7 @@ class Chef
       end
 
       action :update do
+        # FIXME: refactor a bit
         if channel_exists?
           update_needed = false
           begin
@@ -67,7 +70,6 @@ class Chef
               shell_out!("#{pear_bin} channel-update #{new_resource.channel_name}")
             end
           end
-
         end
       end
 
