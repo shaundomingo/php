@@ -76,7 +76,7 @@ class Chef
       action :remove do
         execute "Deleting pear channel #{new_resource.channel_name}" do
           command "#{php_bin} channel-delete #{new_resource.channel_name}"
-          not_if {  channel_exists? }
+          not_if { channel_exists? }
           action :run
         end
       end

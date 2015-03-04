@@ -23,7 +23,6 @@ include PhpCookbook::Helpers
 class Chef
   class Provider
     class PhpPear < Chef::Provider::LWRPBase
-      # boiler plate
       use_inline_resources
 
       def whyrun_supported?

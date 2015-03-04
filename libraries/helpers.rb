@@ -25,7 +25,50 @@ module PhpCookbook
     ###############################
     # php_pear
     ###############################
+
+    def prefix_channel
+      new_resource.channel ? "#{new_resource.channel}/" : ''
+    end
+
+    def full_pkgname
+      prefix_channel + new_resource.package_name
+    end
+
+    # example of something that overlaps?
+    # FIXME: explaination why these functions are needed.
+    def pecl?
+      args = " -d preferred_state=#{new_resource.preferred_state}"
+      args << " search"
+      args << " -c #{new_resource.channel}" if new_resource.channel
+      args << " #{new_resource.package_name}"
+
+      pecl = nil
+      pecl = false if shell_out!("#{pear_bin} #{args}").stdout.match(/MATCHED PACKAGES/)            
+      pecl = true if shell_out!("#{pecl_bin} #{args}").stdout.match(/MATCHED PACKAGES/)
+      fail "#{new_resource.package_name} not found via pear nor pecl" if pecl.nil?
+      return pecl
+    end
+
+    def best_pear_bin
+      # require 'pry'; binding.pry if new_resource.package_name == 'json'
+      return pecl_bin if pecl?
+      pear_bin
+    end
+
+    def pear_install_cmd
+      cmd =  "#{best_pear_bin} -d"
+      cmd << " preferred_state=#{new_resource.preferred_state}" if new_resource.preferred_state
+      cmd << ' install'
+      cmd << ' -a'
+      cmd << " #{new_resource.options}" if new_resource.options
+      cmd << " #{full_pkgname}"
+      cmd << "-#{new_resource.version}" if new_resource.version && !new_resource.version.empty?
+      cmd
+    end
+
+    # Top level used in ruby_blocks
     def install_pear
+      shell_results = shell_out!(pear_install_cmd)
     end
 
     def pear_installed?
@@ -61,12 +104,10 @@ module PhpCookbook
       false
     end
 
-    def el5_php53?
-      if node['platform_family'] == 'rhel' &&  node['platform_version'].to_i == 5 && new_resource.version == '5.3'
-        return true
-      else
-        return false
-      end
+    def very_old_pear?
+      return true if node['platform_family'] == 'rhel' && node['platform_version'].to_i == 5 && new_resource.version == '5.3'
+      return true if node['platform_family'] == 'rhel' && node['platform_version'].to_i == 5 && new_resource.version == '5.1'
+      false
     end
 
     def parsed_php_home

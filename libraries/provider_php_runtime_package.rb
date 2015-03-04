@@ -20,7 +20,7 @@ class Chef
             end
           end
 
-          if el5_php53?
+          if very_old_pear?
             package 'expect' do
               action :install
             end
