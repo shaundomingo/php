@@ -27,63 +27,28 @@ php_pear_channel 'pecl.php.net' do
   action [:discover, :update]
 end
 
-php_pear_channel 'pear.horde.org' do
-  action [:discover, :update]
-end
+####################################
+# packages with various combinations
+####################################
 
-php_pear_channel 'openpear.org' do
-  action [:discover, :update]
-end
+# nothing specified
+php_pear 'Net_Ping'
 
-php_pear_channel 'pear.windowsazure.com' do
-  action [:discover, :update]
-end
-
-#################################
-# packages from each of the above
-# channels
-#################################
-
-# pecl.php.net
-# no version specified
-php_pear 'DTrace' do
-  action :install
-end
-
-# pecl.php.net
-# version specified
-php_pear 'json' do
-  version '1.2.1'
-  action :install
-end
-
-# pear.php.net
-# no version specified
+# channel specified
 php_pear 'HTTP2' do
   channel 'pear.php.net'
   action :install
 end
 
-# pear.php.net
 # version specified
 php_pear 'XML_RPC' do
   version '1.5.5'
   action :install
 end
 
-# pear.horde.org
-# channel specified
-# no version specified
-php_pear 'wicked' do
-  channel 'pear.horde.org'
-  action :install
-end
-
-# pear.horde.org
-# channel specified
-# version specified
-php_pear 'horde_lz4' do
-  version '1.0.7'
-  channel 'pear.horde.org'
+# channel and version specified
+php_pear 'PHPUnit' do
+  channel 'pear.php.net'
+  version '1.3.2'
   action :install
 end

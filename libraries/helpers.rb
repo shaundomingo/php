@@ -1,4 +1,5 @@
 #
+# Author:: Seth Chisamore <schisamo@chef.io>
 # Author:: Sean OMeara (<sean@chef.io>)
 # Cookbook Name:: php
 # Libraries:: helpers
@@ -38,15 +39,15 @@ module PhpCookbook
     # FIXME: explaination why these functions are needed.
     def pecl?
       args = " -d preferred_state=#{new_resource.preferred_state}"
-      args << " search"
+      args << ' search'
       args << " -c #{new_resource.channel}" if new_resource.channel
       args << " #{new_resource.package_name}"
 
       pecl = nil
-      pecl = false if shell_out!("#{pear_bin} #{args}").stdout.match(/MATCHED PACKAGES/)            
-      pecl = true if shell_out!("#{pecl_bin} #{args}").stdout.match(/MATCHED PACKAGES/)
+      pecl = false if shell_out!("#{pear_bin} #{args}", env: nil).stdout.match(/MATCHED PACKAGES/)
+      pecl = true if shell_out!("#{pecl_bin} #{args}", env: nil).stdout.match(/MATCHED PACKAGES/)
       fail "#{new_resource.package_name} not found via pear nor pecl" if pecl.nil?
-      return pecl
+      pecl
     end
 
     def best_pear_bin
@@ -66,12 +67,28 @@ module PhpCookbook
       cmd
     end
 
+    def pear_shell_out!(command)
+      p = shell_out!(command, env: { 'PATH' => '/usr/bin' }, cwd: '/usr/lib64/php/modules')
+      p.invalid! if p.stdout.split('\n').last =~ /^ERROR:.+/i
+      p
+    end
+
     # Top level used in ruby_blocks
     def install_pear
-      shell_results = shell_out!(pear_install_cmd)
+      pear_shell_out!(pear_install_cmd)
+      # shell_out!(pear_install_cmd)
+    end
+
+    def pear_installed_cmd
+      "#{best_pear_bin} list #{new_resource.package_name}"
     end
 
     def pear_installed?
+      # require 'pry'; binding.pry
+      cmd_out = shell_out!(pear_installed_cmd, env: { 'PATH' => '/usr/bin' }, returns: [0, 1])
+      return true if cmd_out.stdout.match(/INSTALLED FILES/)
+      return false if cmd_out.stdout.match(/not installed/)
+      fail "could not determine installation status for #{new_resource.package_name}"
     end
 
     def upgrade_pear
@@ -293,45 +310,52 @@ module PhpCookbook
       # amazon
       return [
         { pkg_name: 'php-common', pkg_version: nil },
-        { pkg_name: 'php-cli', pkg_version: nil }
+        { pkg_name: 'php-cli', pkg_version: nil },
+        { pkg_name: 'php-devel', pkg_version: nil }
       ] if node['platform'] == 'amazon' &&
            parsed_version == '5.3'
 
       return [
         { pkg_name: 'php54-common', pkg_version: nil },
-        { pkg_name: 'php54-cli', pkg_version: nil }
+        { pkg_name: 'php54-cli', pkg_version: nil },
+        { pkg_name: 'php54-devel', pkg_version: nil }
       ] if node['platform'] == 'amazon' &&
            parsed_version == '5.4'
 
       return [
         { pkg_name: 'php55-common', pkg_version: nil },
-        { pkg_name: 'php55-cli', pkg_version: nil }
+        { pkg_name: 'php55-cli', pkg_version: nil },
+        { pkg_name: 'php55-devel', pkg_version: nil }
       ] if node['platform'] == 'amazon' &&
            parsed_version == '5.5'
 
       # rhel
       return [
         { pkg_name: 'php53-common', pkg_version: nil },
-        { pkg_name: 'php53-cli', pkg_version: nil }
+        { pkg_name: 'php53-cli', pkg_version: nil },
+        { pkg_name: 'php53-devel', pkg_version: nil }
       ] if node['platform_family'] == 'rhel' &&
            node['platform_version'].to_i == 5 &&
            parsed_version == '5.3'
 
       return [
         { pkg_name: 'php-common', pkg_version: nil },
-        { pkg_name: 'php-cli', pkg_version: nil }
+        { pkg_name: 'php-cli', pkg_version: nil },
+        { pkg_name: 'php-devel', pkg_version: nil }
       ] if node['platform_family'] == 'rhel'
 
       # fedora
       return [
         { pkg_name: 'php-common', pkg_version: nil },
-        { pkg_name: 'php-cli', pkg_version: nil }
+        { pkg_name: 'php-cli', pkg_version: nil },
+        { pkg_name: 'php-devel', pkg_version: nil }
       ] if node['platform_family'] == 'fedora'
 
       # debian
       return [
         { pkg_name: 'php5', pkg_version: nil },
-        { pkg_name: 'php5-cli', pkg_version: nil }
+        { pkg_name: 'php5-cli', pkg_version: nil },
+        { pkg_name: 'php5-dev', pkg_version: nil }
       ] if node['platform'] == 'debian' &&
            node['platform_version'].to_i == 7 &&
            parsed_version == '5.4'
@@ -339,21 +363,24 @@ module PhpCookbook
       # ubuntu
       return [
         { pkg_name: 'php5', pkg_version: nil },
-        { pkg_name: 'php5-cli', pkg_version: nil }
+        { pkg_name: 'php5-cli', pkg_version: nil },
+        { pkg_name: 'php5-dev', pkg_version: nil }
       ] if node['platform'] == 'ubuntu' &&
            node['platform_version'].to_f == 10.04 &&
            parsed_version == '5.3'
 
       return [
         { pkg_name: 'php5', pkg_version: nil },
-        { pkg_name: 'php5-cli', pkg_version: nil }
+        { pkg_name: 'php5-cli', pkg_version: nil },
+        { pkg_name: 'php5-dev', pkg_version: nil }
       ] if node['platform'] == 'ubuntu' &&
            node['platform_version'].to_f == 12.04 &&
            parsed_version == '5.3'
 
       return [
         { pkg_name: 'php5', pkg_version: nil },
-        { pkg_name: 'php5-cli', pkg_version: nil }
+        { pkg_name: 'php5-cli', pkg_version: nil },
+        { pkg_name: 'php5-dev', pkg_version: nil }
       ] if node['platform'] == 'ubuntu' &&
            node['platform_version'].to_f == 14.04 &&
            parsed_version == '5.5'
