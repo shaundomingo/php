@@ -51,7 +51,6 @@ module PhpCookbook
     end
 
     def best_pear_bin
-      # require 'pry'; binding.pry if new_resource.package_name == 'json'
       return pecl_bin if pecl?
       pear_bin
     end
@@ -76,7 +75,6 @@ module PhpCookbook
     # Top level used in ruby_blocks
     def install_pear
       pear_shell_out!(pear_install_cmd)
-      # shell_out!(pear_install_cmd)
     end
 
     def pear_installed_cmd
@@ -84,10 +82,9 @@ module PhpCookbook
     end
 
     def pear_installed?
-      # require 'pry'; binding.pry
       cmd_out = shell_out!(pear_installed_cmd, env: { 'PATH' => '/usr/bin' }, returns: [0, 1])
-      return true if cmd_out.stdout.match(/INSTALLED FILES/)
-      return false if cmd_out.stdout.match(/not installed/)
+      return true if cmd_out.stdout.match(/INSTALLED FILES/i)
+      return false if cmd_out.stdout.match(/not installed/i)
       fail "could not determine installation status for #{new_resource.package_name}"
     end
 

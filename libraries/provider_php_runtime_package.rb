@@ -7,7 +7,7 @@ class Chef
         action :install do
           # because pecls need compilers
           # include_recipe 'build-essential'
-          
+
           configure_package_repositories if new_resource.manage_package_repos
 
           cache_path = Chef::Config[:file_cache_path]
