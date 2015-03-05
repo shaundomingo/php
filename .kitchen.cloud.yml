@@ -168,9 +168,9 @@ platforms:
 #     chef_omnibus_url: https://raw.github.com/test-kitchen/kitchen-joyent/master/scripts/install-smartos.sh
 
 suites:
-  ##################
-  # package provider
-  ##################
+  ##############################
+  # php_runtime package provider
+  ##############################
   - name: runtime51-package
     run_list:
       - recipe[php_runtime_test::package]
@@ -237,9 +237,9 @@ suites:
       'fedora-21',
     ]
 
-  ##################
-  # source provider
-  ##################
+  #############################
+  # php_runtime source provider
+  #############################
   # - name: runtime-source
   #   run_list:
   #     - recipe[php_runtime_test::source]
@@ -256,9 +256,8 @@ suites:
   #   ]
 
   ##################
-  # pear
+  # php_pear_channel
   ##################
-
   - name: pear-channel51
     run_list:
       - recipe[php_pear_channel_test]
@@ -324,6 +323,9 @@ suites:
       'fedora-21',
     ]
 
+  ##########
+  # php_pear
+  ##########
   - name: pear-package51
     run_list:
       - recipe[php_pear_test]
@@ -332,4 +334,61 @@ suites:
        version: '5.1'
     includes: [
       'centos-5.8',
+    ]
+
+  - name: pear-package53
+    run_list:
+      - recipe[php_pear_test]
+    attributes:
+      php:
+       version: '5.3'
+    includes: [
+      'amazon-2014.09',
+      'centos-5.8',
+      'centos-6.5',
+      'ubuntu-10.04',
+      'ubuntu-12.04',
+    ]
+
+  - name: pear-package54
+    run_list:
+      - recipe[php_pear_test]
+    attributes:
+      php:
+       version: '5.4'
+    includes: [
+      'amazon-2014.09',
+      'centos-5.8',
+      'centos-6.5',
+      'centos-7.0',
+      'debian-7.0'
+    ]
+
+  - name: pear-package55
+    run_list:
+      - recipe[php_pear_test]
+    attributes:
+      php:
+       version: '5.5'
+    includes: [
+      'amazon-2014.09',
+      'centos-5.8',
+      'centos-6.5',
+      'centos-7.0',
+      'fedora-20',
+      'ubuntu-14.04'
+    ]
+
+  - name: pear-package56
+    run_list:
+      - recipe[php_pear_test]
+    attributes:
+      php:
+       version: '5.6'
+    includes: [
+      'centos-5.8',
+      'centos-6.5',
+      'centos-7.0',
+      'fedora-20',
+      'fedora-21',
     ]

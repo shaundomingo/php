@@ -44,8 +44,8 @@ module PhpCookbook
       args << " #{new_resource.package_name}"
 
       pecl = nil
-      pecl = false if shell_out!("#{pear_bin} #{args}", env: nil).stdout.match(/MATCHED PACKAGES/)
-      pecl = true if shell_out!("#{pecl_bin} #{args}", env: nil).stdout.match(/MATCHED PACKAGES/)
+      pecl = false if shell_out!("#{pear_bin} #{args}", env: nil).stdout.match(/MATCHED PACKAGES/i)
+      pecl = true if shell_out!("#{pecl_bin} #{args}", env: nil).stdout.match(/MATCHED PACKAGES/i)
       fail "#{new_resource.package_name} not found via pear nor pecl" if pecl.nil?
       pecl
     end
