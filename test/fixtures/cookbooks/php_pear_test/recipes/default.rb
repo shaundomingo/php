@@ -35,14 +35,14 @@ end
 php_pear 'Net_Ping'
 
 # channel specified
-php_pear 'HTTP2' do
+php_pear 'Net_Portscan' do
   channel 'pear.php.net'
   action :install
 end
 
 # version specified
-php_pear 'XML_RPC' do
-  version '1.5.5'
+php_pear 'HTTP2' do
+  version '1.1.0'
   action :install
 end
 

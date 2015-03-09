@@ -59,21 +59,26 @@ module PhpCookbook
       cmd =  "#{best_pear_bin} -d"
       cmd << " preferred_state=#{new_resource.preferred_state}" if new_resource.preferred_state
       cmd << ' install'
-      cmd << ' -a'
+      # cmd << ' -a'
       cmd << " #{new_resource.options}" if new_resource.options
       cmd << " #{full_pkgname}"
-      cmd << "-#{new_resource.version}" if new_resource.version && !new_resource.version.empty?
+      cmd << "-#{new_resource.version}" if new_resource.version
       cmd
     end
 
+    def ext_dir
+      shell_out!("/usr/bin/php-config --extension-dir", env: nil).stdout
+    end
+
     def pear_shell_out!(command)
-      p = shell_out!(command, env: { 'PATH' => '/usr/bin' }, cwd: '/usr/lib64/php/modules')
+      p = shell_out!(command, env: nil)
       p.invalid! if p.stdout.split('\n').last =~ /^ERROR:.+/i
       p
     end
 
     # Top level used in ruby_blocks
     def install_pear
+      puts "SEANDEBUG: pear_install_cmd: #{pear_install_cmd}"
       pear_shell_out!(pear_install_cmd)
     end
 
@@ -82,7 +87,7 @@ module PhpCookbook
     end
 
     def pear_installed?
-      cmd_out = shell_out!(pear_installed_cmd, env: { 'PATH' => '/usr/bin' }, returns: [0, 1])
+      cmd_out = shell_out!(pear_installed_cmd, env: nil, returns: [0, 1])
       return true if cmd_out.stdout.match(/INSTALLED FILES/i)
       return false if cmd_out.stdout.match(/not installed/i)
       fail "could not determine installation status for #{new_resource.package_name}"
