@@ -59,7 +59,6 @@ module PhpCookbook
       cmd =  "#{best_pear_bin} -d"
       cmd << " preferred_state=#{new_resource.preferred_state}" if new_resource.preferred_state
       cmd << ' install'
-      # cmd << ' -a'
       cmd << " #{new_resource.options}" if new_resource.options
       cmd << " #{full_pkgname}"
       cmd << "-#{new_resource.version}" if new_resource.version
@@ -76,30 +75,64 @@ module PhpCookbook
       p
     end
 
-    # Top level used in ruby_blocks
-    def install_pear
-      puts "SEANDEBUG: pear_install_cmd: #{pear_install_cmd}"
-      pear_shell_out!(pear_install_cmd)
+    def pear_list_cmd
+      "#{best_pear_bin} list"
     end
 
-    def pear_installed_cmd
+    def pear_list_package_cmd
       "#{best_pear_bin} list #{new_resource.package_name}"
     end
 
+    def pear_search_cmd
+      "#{best_pear_bin} search #{new_resource.package_name}"
+    end
+
+    def installed_version
+      cmd_out = shell_out!(pear_list_cmd, env: nil, returns: [0, 1])
+      match = cmd_out.stdout.match(/#{new_resource.package_name}\W*(\d*\.\d*\.\d*)/i)
+      return nil if match.nil?
+      match[1]
+    end
+
+    def candidate_version
+      cmd_out = shell_out!(pear_search_cmd, env: nil, returns: [0, 1])
+      match = cmd_out.stdout.match(/#{new_resource.package_name}\W*(\d*\.\d*\.\d*)/i)
+      return nil if match.nil?
+      match[1]
+    end
+
+    def pear_upgrade_cmd
+      cmd =  "#{best_pear_bin} -d"
+      cmd << " preferred_state=#{new_resource.preferred_state}" if new_resource.preferred_state
+      cmd << ' upgrade'
+      cmd << " #{full_pkgname}"
+      cmd << "-#{new_resource.version}" if new_resource.version
+      cmd
+    end
+
+    # Top level used in ruby_blocks
+    def install_pear
+      pear_shell_out!(pear_install_cmd)
+    end
+
     def pear_installed?
-      cmd_out = shell_out!(pear_installed_cmd, env: nil, returns: [0, 1])
+      cmd_out = shell_out!(pear_list_package_cmd, env: nil, returns: [0, 1])
       return true if cmd_out.stdout.match(/INSTALLED FILES/i)
       return false if cmd_out.stdout.match(/not installed/i)
       fail "could not determine installation status for #{new_resource.package_name}"
     end
 
     def upgrade_pear
+      pear_shell_out!(pear_upgrade_cmd)
     end
 
     def pear_at_desired_version?
+      return true if new_resource.version == installed_version
+      false
     end
 
     def upgrade_available?
+      return true if candidate_version != installed_version
     end
 
     def remove_pear
