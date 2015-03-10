@@ -67,7 +67,7 @@ module PhpCookbook
     end
 
     def ext_dir
-      shell_out!("/usr/bin/php-config --extension-dir", env: nil).stdout
+      shell_out!('/usr/bin/php-config --extension-dir', env: nil).stdout
     end
 
     def pear_shell_out!(command)
