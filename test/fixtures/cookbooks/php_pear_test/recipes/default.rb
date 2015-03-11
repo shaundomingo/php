@@ -59,8 +59,9 @@ end
 
 # manually install an old pear
 execute 'install old version of Net_Url' do
-  command '/usr/bin/pear install Net_Url-1.0.1'
+  command '/usr/bin/pear install Net_Url-1.0.1 && touch /tmp/pear_net_url'
   not_if '/usr/bin/pear list | grep ^Net_URL[[:space:]].*1.0.1'
+  creates '/tmp/pear_net_url'
 end
 
 # upgrade to specific version
@@ -72,12 +73,29 @@ end
 
 # manually install an old pear
 execute 'install old version of Net_Socket' do
-  command '/usr/bin/pear install Net_Socket-1.0.1'
+  command '/usr/bin/pear install Net_Socket-1.0.1 && touch /tmp/pear_net_socket'
   not_if '/usr/bin/pear list | grep ^Net_Socket[[:space:]].*1.0.1'
+  creates '/tmp/pear_net_socket'
 end
 
 # upgrade to any version
 php_pear 'Net_Socket' do
   channel 'pear.php.net'
   action :upgrade
+end
+
+##########
+# :remove
+##########
+
+# manually install a random pear
+execute 'install Date' do
+  command '/usr/bin/pear install Date && touch /tmp/pear_date'
+  not_if '/usr/bin/pear list | grep ^Date'
+  creates '/tmp/pear_date'
+end
+
+# upgrade to any version
+php_pear 'Date' do
+  action :remove
 end

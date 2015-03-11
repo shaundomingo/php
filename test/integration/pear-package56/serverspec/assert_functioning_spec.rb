@@ -20,4 +20,5 @@ describe command(pear_cmd) do
   its(:stdout) { should match(/^PHPUnit\s*1\.3\.2/) }
   its(:stdout) { should match(/^Net_URL\s*1\.0\.15/) }
   its(:stdout) { should match(/^Net_Socket\s*1\.0\.14/) }
+  its(:stdout) { should_not match(/^Date/) }
 end

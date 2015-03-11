@@ -44,8 +44,8 @@ module PhpCookbook
       args << " #{new_resource.package_name}"
 
       pecl = nil
-      pecl = false if shell_out!("#{pear_bin} #{args}", env: nil).stdout.match(/MATCHED PACKAGES/i)
-      pecl = true if shell_out!("#{pecl_bin} #{args}", env: nil).stdout.match(/MATCHED PACKAGES/i)
+      pecl = false if shell_out!("#{pear_bin} #{args}", env: nil).stdout.match(/#{new_resource.package_name}\W*(\d*\.\d*\.\d*)/i)
+      pecl = true if shell_out!("#{pecl_bin} #{args}", env: nil).stdout.match(/#{new_resource.package_name}\W*(\d*\.\d*\.\d*)/i)
       fail "#{new_resource.package_name} not found via pear nor pecl" if pecl.nil?
       pecl
     end
@@ -110,16 +110,24 @@ module PhpCookbook
       cmd
     end
 
+    def pear_remove_cmd
+      cmd =  "#{best_pear_bin}"
+      cmd << ' uninstall'
+      cmd << " #{new_resource.options}" if new_resource.options
+      cmd << " #{full_pkgname}"
+      cmd << "-#{new_resource.version}" if new_resource.version
+      cmd
+    end
+
     # Top level used in ruby_blocks
     def install_pear
       pear_shell_out!(pear_install_cmd)
     end
 
     def pear_installed?
-      cmd_out = shell_out!(pear_list_package_cmd, env: nil, returns: [0, 1])
-      return true if cmd_out.stdout.match(/INSTALLED FILES/i)
-      return false if cmd_out.stdout.match(/not installed/i)
-      fail "could not determine installation status for #{new_resource.package_name}"
+      cmd_out = shell_out!(pear_list_cmd, env: nil, returns: [0, 1])
+      return true if cmd_out.stdout.match(/#{new_resource.package_name}\W*(\d*\.\d*\.\d*)/i)
+      false
     end
 
     def upgrade_pear
@@ -136,9 +144,11 @@ module PhpCookbook
     end
 
     def remove_pear
+      pear_shell_out!(pear_remove_cmd)
     end
 
     def purge_pear
+      pear_shell_out!(pear_remove_cmd)
     end
 
     ###############################
