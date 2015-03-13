@@ -49,8 +49,6 @@ class Chef
       end
 
       action :remove do
-        # require 'pry'; binding.pry
-
         # block methods found in libraries/helpers.rb
         ruby_block "#{new_resource.name} :remove #{new_resource.package_name}" do
           block { remove_pear }
