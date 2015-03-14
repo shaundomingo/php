@@ -44,6 +44,7 @@ module PhpCookbook
       args << " #{new_resource.package_name}"
 
       pecl = nil
+      puts "SEANDEBUG: #{pear_bin} #{args}"
       pecl = false if shell_out!("#{pear_bin} #{args}", env: nil).stdout.match(/#{new_resource.package_name}\W*(\d*\.\d*\.\d*)/i)
       pecl = true if shell_out!("#{pecl_bin} #{args}", env: nil).stdout.match(/#{new_resource.package_name}\W*(\d*\.\d*\.\d*)/i)
       fail "#{new_resource.package_name} not found via pear nor pecl" if pecl.nil?
