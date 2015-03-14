@@ -46,7 +46,6 @@ class Chef
         # FIXME: Document how to get this XML
         execute "Adding pear channel #{new_resource} from #{new_resource.channel_xml}" do
           command "#{pear_bin} channel-add #{new_resource.channel_xml}"
-          puts "SEANDEBUG #{pear_bin} list-channels | grep ^#{new_resource.channel_name}[[:space:]]"
           not_if "#{pear_bin} list-channels | awk '{ print $2 }'| grep ^#{new_resource.channel_name}$"
           action :run
         end

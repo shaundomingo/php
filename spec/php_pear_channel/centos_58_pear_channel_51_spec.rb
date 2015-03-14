@@ -12,6 +12,7 @@ describe 'php_pear_channel_test::default' do
   end
 
   before do
+    stub_command("/usr/bin/pear list-channels | awk '{ print $2 }'| grep ^symfony$").and_return(false)
     stub_command('/usr/bin/pear list-channels | grep ^pear.horde.org').and_return(false)
   end
 
