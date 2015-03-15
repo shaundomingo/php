@@ -56,7 +56,7 @@ class Chef
         if channel_exists?
           update_needed = false
           begin
-            update_needed = true if shell_out("#{pear_bin} search -c #{new_resource.channel_name} NNNNNN").stdout =~ /channel-update/
+            update_needed = true if shell_out("#{pear_bin} search -c #{new_resource.channel_name} NNNNNN", env: nil).stdout =~ /channel-update/
           rescue Chef::Exceptions::CommandTimeout
             # CentOS can hang on 'pear search' if a channel needs updating
             Chef::Log.info("Timed out checking if channel-update needed...forcing update of pear channel #{new_resource.channel_name}")
@@ -67,7 +67,7 @@ class Chef
             description = "update pear channel #{new_resource}"
             converge_by(description) do
               Chef::Log.info("Updating pear channel #{new_resource}")
-              shell_out!("#{pear_bin} channel-update #{new_resource.channel_name}")
+              shell_out!("#{pear_bin} channel-update #{new_resource.channel_name}", env: nil)
             end
           end
         end
