@@ -17,9 +17,6 @@
 # limitations under the License.
 #
 
-# methods from libraries/helpers.rb
-include PhpCookbook::Helpers
-
 class Chef
   class Provider
     class PhpPear < Chef::Provider::LWRPBase
@@ -28,6 +25,9 @@ class Chef
       def whyrun_supported?
         true
       end
+
+      # methods from libraries/helpers.rb
+      include PhpCookbook::Helpers
 
       action :install do
         # block methods found in libraries/helpers.rb

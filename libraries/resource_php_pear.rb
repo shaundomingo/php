@@ -32,6 +32,8 @@ class Chef
       attribute :directives, kind_of: Hash, default: {}
       attribute :zend_extensions, kind_of: Array, default: []
       attribute :preferred_state, default: 'stable'
+
+      include PhpCookbook::Helpers
     end
   end
 end

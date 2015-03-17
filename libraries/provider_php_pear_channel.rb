@@ -22,7 +22,6 @@
 require 'chef/mixin/shell_out'
 require 'chef/mixin/language'
 include Chef::Mixin::ShellOut
-include PhpCookbook::Helpers
 
 class Chef
   class Provider
@@ -33,6 +32,8 @@ class Chef
         true
       end
 
+      include PhpCookbook::Helpers
+      
       action :discover do
         # FIXME: Document where this is looking for channel lists
         execute "Discovering pear channel #{new_resource.channel_name}" do

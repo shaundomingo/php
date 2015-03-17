@@ -4,6 +4,12 @@ class Chef
   class Provider
     class PhpRuntime
       class Package < Chef::Provider::PhpRuntime
+        use_inline_resources
+
+        def whyrun_supported?
+          true
+        end
+
         action :install do
           # because pecls need compilers
           # include_recipe 'build-essential'

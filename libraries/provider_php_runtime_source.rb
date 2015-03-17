@@ -4,6 +4,14 @@ class Chef
   class Provider
     class PhpRuntime
       class Source < Chef::Provider::PhpRuntime
+        use_inline_resources
+
+        def whyrun_supported?
+          true
+        end
+
+        include PhpCookbook::Helpers
+
         action :install do
           include_recipe 'build-essential'
           include_recipe 'yum-epel' if new_resource.manage_package_repos && node['platform_family'] == 'rhel'

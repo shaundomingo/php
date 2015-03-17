@@ -1,0 +1,237 @@
+#<% require 'kitchen-sync' %>
+---
+driver:
+  name: docker
+
+provisioner:
+  require_chef_omnibus: true
+  name: dummy
+
+platforms:
+- name: centos-6.4
+
+suites:
+  ##############################
+  # php_runtime package provider
+  ##############################
+  - name: runtime51-package
+    run_list:
+      - recipe[php_runtime_test::package]
+    attributes:
+      php:
+       version: '5.1'
+    includes: ['centos-5.8']
+
+  - name: runtime53-package
+    run_list:
+      - recipe[php_runtime_test::package]
+    attributes:
+      php:
+       version: '5.3'
+    includes: [
+      'amazon-2014.09',
+      'centos-5.8',
+      'centos-6.4',
+      'ubuntu-10.04',
+      'ubuntu-12.04',
+      'omnios-151006'
+    ]
+
+  - name: runtime54-package
+    run_list:
+      - recipe[php_runtime_test::package]
+    attributes:
+      php:
+       version: '5.4'
+    includes: [
+      'amazon-2014.09',
+      'centos-5.8',
+      'centos-6.4',
+      'centos-7.0',
+      'debian-7.0'
+    ]
+
+  - name: runtime55-package
+    run_list:
+      - recipe[php_runtime_test::package]
+    attributes:
+      php:
+       version: '5.5'
+    includes: [
+      'amazon-2014.09',
+      'centos-5.8',
+      'centos-6.4',
+      'centos-7.0',
+      'fedora-20',
+      'ubuntu-14.04'
+    ]
+
+  - name: runtime56-package
+    run_list:
+      - recipe[php_runtime_test::package]
+    attributes:
+      php:
+       version: '5.6'
+    includes: [
+      'centos-5.8',
+      'centos-6.4',
+      'centos-7.0',
+      'fedora-20',
+      'fedora-21',
+    ]
+
+  #############################
+  # php_runtime source provider
+  #############################
+  # - name: runtime-source
+  #   run_list:
+  #     - recipe[php_runtime_test::source]
+  #   includes: [
+  #     'centos-5.8',
+  #     'centos-6.4',
+  #     'centos-7.0',
+  #     'fedora-20',
+  #     'fedora-21',
+  #     'debian-7.0',
+  #     'ubuntu-10.04',
+  #     'ubuntu-12.04',
+  #     'ubuntu-14.04'
+  #   ]
+
+  ##################
+  # php_pear_channel
+  ##################
+  - name: pear-channel51
+    run_list:
+      - recipe[php_pear_channel_test]
+    attributes:
+      php:
+       version: '5.1'
+    includes: [ 'centos-5.8' ]
+
+  - name: pear-channel53
+    run_list:
+      - recipe[php_pear_channel_test]
+    attributes:
+      php:
+       version: '5.3'
+    includes: [
+      'amazon-2014.09',
+      'centos-5.8',
+      'centos-6.4',
+      'ubuntu-10.04',
+      'ubuntu-12.04',
+    ]
+
+  - name: pear-channel54
+    run_list:
+      - recipe[php_pear_channel_test]
+    attributes:
+      php:
+       version: '5.4'
+    includes: [
+      'amazon-2014.09',
+      'centos-5.8',
+      'centos-6.4',
+      'centos-7.0',
+      'debian-7.0'
+    ]
+
+  - name: pear-channel55
+    run_list:
+      - recipe[php_pear_channel_test]
+    attributes:
+      php:
+       version: '5.5'
+    includes: [
+      'amazon-2014.09',
+      'centos-5.8',
+      'centos-6.4',
+      'centos-7.0',
+      'fedora-20',
+      'ubuntu-14.04'
+    ]
+
+  - name: pear-channel56
+    run_list:
+      - recipe[php_pear_channel_test]
+    attributes:
+      php:
+       version: '5.6'
+    includes: [
+      'centos-5.8',
+      'centos-6.4',
+      'centos-7.0',
+      'fedora-20',
+      'fedora-21',
+    ]
+
+  ##########
+  # php_pear
+  ##########
+  - name: pear-package51
+    run_list:
+      - recipe[php_pear_test]
+    attributes:
+      php:
+       version: '5.1'
+    includes: [
+      'centos-5.8',
+    ]
+
+  - name: pear-package53
+    run_list:
+      - recipe[php_pear_test]
+    attributes:
+      php:
+       version: '5.3'
+    includes: [
+      'amazon-2014.09',
+      'centos-5.8',
+      'centos-6.4',
+      'ubuntu-10.04',
+      'ubuntu-12.04',
+    ]
+
+  - name: pear-package54
+    run_list:
+      - recipe[php_pear_test]
+    attributes:
+      php:
+       version: '5.4'
+    includes: [
+      'amazon-2014.09',
+      'centos-5.8',
+      'centos-6.4',
+      'centos-7.0',
+      'debian-7.0'
+    ]
+
+  - name: pear-package55
+    run_list:
+      - recipe[php_pear_test]
+    attributes:
+      php:
+       version: '5.5'
+    includes: [
+      'amazon-2014.09',
+      'centos-5.8',
+      'centos-6.4',
+      'centos-7.0',
+      'fedora-20',
+      'ubuntu-14.04'
+    ]
+
+  - name: pear-package56
+    run_list:
+      - recipe[php_pear_test]
+    attributes:
+      php:
+       version: '5.6'
+    includes: [
+      'centos-5.8',
+      'centos-6.4',
+      'centos-7.0',
+      'fedora-20',
+      'fedora-21',
+    ]

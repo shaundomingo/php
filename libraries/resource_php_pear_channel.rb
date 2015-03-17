@@ -30,6 +30,8 @@ class Chef
       # TODO: add authenticated channel support
       # attribute :username, :kind_of => String
       # attribute :password, :kind_of => String
+
+      include PhpCookbook::Helpers
     end
   end
 end

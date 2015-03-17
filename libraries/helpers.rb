@@ -155,6 +155,20 @@ module PhpCookbook
     # common, runtime, pear_channel
     ###############################
 
+    def parsed_version
+      return new_resource.version if new_resource.version
+      return '5.3' if node['platform'] == 'amazon'
+      return '5.4' if node['platform'] == 'debian'
+      return '5.3' if node['platform'] == 'ubuntu' && node['platform_version'].to_f == 10.04
+      return '5.3' if node['platform'] == 'ubuntu' && node['platform_version'].to_f == 12.04
+      return '5.5' if node['platform'] == 'ubuntu' && node['platform_version'].to_f == 14.04
+      return '5.3' if node['platform_family'] == 'rhel' && node['platform_version'].to_i == 5
+      return '5.3' if node['platform_family'] == 'rhel' && node['platform_version'].to_i == 6
+      return '5.4' if node['platform_family'] == 'rhel' && node['platform_version'].to_i == 7
+      return '5.4' if node['platform_family'] == 'fedora' && node['platform_version'].to_i == 20
+      return '5.5' if node['platform_family'] == 'fedora' && node['platform_version'].to_i == 21
+    end
+    
     def cache_path
       Chef::Config[:file_cache_path]
     end
@@ -318,19 +332,6 @@ module PhpCookbook
       runtime_packages
     end
 
-    def parsed_version
-      return new_resource.version if new_resource.version
-      return '5.3' if node['platform'] == 'amazon'
-      return '5.4' if node['platform'] == 'debian'
-      return '5.3' if node['platform'] == 'ubuntu' && node['platform_version'].to_f == 10.04
-      return '5.3' if node['platform'] == 'ubuntu' && node['platform_version'].to_f == 12.04
-      return '5.5' if node['platform'] == 'ubuntu' && node['platform_version'].to_f == 14.04
-      return '5.3' if node['platform_family'] == 'rhel' && node['platform_version'].to_i == 5
-      return '5.3' if node['platform_family'] == 'rhel' && node['platform_version'].to_i == 6
-      return '5.4' if node['platform_family'] == 'rhel' && node['platform_version'].to_i == 7
-      return '5.4' if node['platform_family'] == 'fedora' && node['platform_version'].to_i == 20
-      return '5.5' if node['platform_family'] == 'fedora' && node['platform_version'].to_i == 21
-    end
 
     def configure_package_repositories
       platfam = node['platform_family']
