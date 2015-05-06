@@ -392,3 +392,73 @@ suites:
       'fedora-20',
       'fedora-21',
     ]
+
+  ############
+  # php_module
+  ############
+  - name: module51
+    run_list:
+      - recipe[php_module_test]
+    attributes:
+      php:
+       version: '5.1'
+    includes: [
+      'centos-5.8',
+    ]
+
+  - name: module53
+    run_list:
+      - recipe[php_module_test]
+    attributes:
+      php:
+       version: '5.3'
+    includes: [
+      'amazon-2014.09',
+      'centos-5.8',
+      'centos-6.5',
+      'ubuntu-10.04',
+      'ubuntu-12.04',
+    ]
+
+  - name: module54
+    run_list:
+      - recipe[php_module_test]
+    attributes:
+      php:
+       version: '5.4'
+    includes: [
+      'amazon-2014.09',
+      'centos-5.8',
+      'centos-6.5',
+      'centos-7.0',
+      'debian-7.0'
+    ]
+
+  - name: module55
+    run_list:
+      - recipe[php_module_test]
+    attributes:
+      php:
+       version: '5.5'
+    includes: [
+      'amazon-2014.09',
+      'centos-5.8',
+      'centos-6.5',
+      'centos-7.0',
+      'fedora-20',
+      'ubuntu-14.04'
+    ]
+
+  - name: module56
+    run_list:
+      - recipe[php_module_test]
+    attributes:
+      php:
+       version: '5.6'
+    includes: [
+      'centos-5.8',
+      'centos-6.5',
+      'centos-7.0',
+      'fedora-20',
+      'fedora-21',
+    ]

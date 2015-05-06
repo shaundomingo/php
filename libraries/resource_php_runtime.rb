@@ -26,10 +26,10 @@ class Chef
       default_action :install
 
       provides :php_runtime
-      
+
       # package provider expects version in the form '5.x'
       # source provider expects version in the form '5.x.x'
-      
+
       attribute :build_pkgdeps, kind_of: Array, default: nil
       attribute :configure_options, kind_of: Array, default: nil
       attribute :directives, kind_of: Hash, default: {}

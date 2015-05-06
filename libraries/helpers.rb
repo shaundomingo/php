@@ -168,7 +168,7 @@ module PhpCookbook
       return '5.4' if node['platform_family'] == 'fedora' && node['platform_version'].to_i == 20
       return '5.5' if node['platform_family'] == 'fedora' && node['platform_version'].to_i == 21
     end
-    
+
     def cache_path
       Chef::Config[:file_cache_path]
     end
@@ -331,7 +331,6 @@ module PhpCookbook
       return new_resource.packages if new_resource.packages
       runtime_packages
     end
-
 
     def configure_package_repositories
       platfam = node['platform_family']

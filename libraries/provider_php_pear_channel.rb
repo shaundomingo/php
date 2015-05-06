@@ -33,7 +33,7 @@ class Chef
       end
 
       include PhpCookbook::Helpers
-      
+
       action :discover do
         # FIXME: Document where this is looking for channel lists
         execute "Discovering pear channel #{new_resource.channel_name}" do
