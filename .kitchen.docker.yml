@@ -4,11 +4,20 @@ driver:
   name: docker
 
 provisioner:
-  require_chef_omnibus: true
+  require_chef_omnibus: latest
   name: dummy
 
 platforms:
+- name: centos-5.8
 - name: centos-6.4
+- name: centos-7.0
+- name: fedora-21
+- name: debian-7
+- name: debian-8
+- name: ubuntu-10.04
+- name: ubuntu-12.04
+- name: ubuntu-14.04
+- name: ubuntu-15.04
 
 suites:
   ##############################
@@ -48,7 +57,7 @@ suites:
       'centos-5.8',
       'centos-6.4',
       'centos-7.0',
-      'debian-7.0'
+      'debian-7'
     ]
 
   - name: runtime55-package
@@ -73,6 +82,7 @@ suites:
       php:
        version: '5.6'
     includes: [
+      'debian-8',
       'centos-5.8',
       'centos-6.4',
       'centos-7.0',
@@ -92,7 +102,7 @@ suites:
   #     'centos-7.0',
   #     'fedora-20',
   #     'fedora-21',
-  #     'debian-7.0',
+  #     'debian-7',
   #     'ubuntu-10.04',
   #     'ubuntu-12.04',
   #     'ubuntu-14.04'
@@ -134,7 +144,7 @@ suites:
       'centos-5.8',
       'centos-6.4',
       'centos-7.0',
-      'debian-7.0'
+      'debian-7'
     ]
 
   - name: pear-channel55
@@ -204,7 +214,7 @@ suites:
       'centos-5.8',
       'centos-6.4',
       'centos-7.0',
-      'debian-7.0'
+      'debian-7'
     ]
 
   - name: pear-package55
@@ -234,4 +244,5 @@ suites:
       'centos-7.0',
       'fedora-20',
       'fedora-21',
+      'debian-8'
     ]

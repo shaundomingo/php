@@ -337,17 +337,17 @@ module PhpCookbook
       platver = node['platform_version']
       case parsed_version
       when '5.4'
-        include_recipe 'yum-remi::remi' if platfam == 'rhel' && platver.to_i == 5
-        include_recipe 'yum-remi::remi' if platfam == 'rhel' && platver.to_i == 6
+        include_recipe 'yum-remi-chef::remi' if platfam == 'rhel' && platver.to_i == 5
+        include_recipe 'yum-remi-chef::remi' if platfam == 'rhel' && platver.to_i == 6
       when '5.5'
-        include_recipe 'yum-remi::remi-php55' if platfam == 'rhel' && platver.to_i == 5
-        include_recipe 'yum-remi::remi-php55' if platfam == 'rhel' && platver.to_i == 6
-        include_recipe 'yum-remi::remi-php55' if platfam == 'rhel' && platver.to_i == 7
+        include_recipe 'yum-remi-chef::remi-php55' if platfam == 'rhel' && platver.to_i == 5
+        include_recipe 'yum-remi-chef::remi-php55' if platfam == 'rhel' && platver.to_i == 6
+        include_recipe 'yum-remi-chef::remi-php55' if platfam == 'rhel' && platver.to_i == 7
       when '5.6'
-        include_recipe 'yum-remi::remi-php56' if platfam == 'rhel' && platver.to_i == 5
-        include_recipe 'yum-remi::remi-php56' if platfam == 'rhel' && platver.to_i == 6
-        include_recipe 'yum-remi::remi-php56' if platfam == 'rhel' && platver.to_i == 7
-        include_recipe 'yum-remi::remi-php56' if platfam == 'fedora' && platver.to_i == 20
+        include_recipe 'yum-remi-chef::remi-php56' if platfam == 'rhel' && platver.to_i == 5
+        include_recipe 'yum-remi-chef::remi-php56' if platfam == 'rhel' && platver.to_i == 6
+        include_recipe 'yum-remi-chef::remi-php56' if platfam == 'rhel' && platver.to_i == 7
+        include_recipe 'yum-remi-chef::remi-php56' if platfam == 'fedora' && platver.to_i == 20
       end
     end
 
