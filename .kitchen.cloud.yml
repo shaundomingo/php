@@ -65,15 +65,6 @@ platforms:
 #   run_list:
 #   - recipe[selinux::disabled]
 
-- name: fedora-20
-  driver_plugin: digital_ocean
-  driver_config:
-    size: 2gb
-    image: fedora-20-x64
-    region: <%= ENV['DIGITALOCEAN_REGION'] %>
-    ssh_key_ids: <%= ENV['DIGITALOCEAN_SSH_KEY_IDS'] %>
-    ssh_key: <%= ENV['DIGITALOCEAN_SSH_KEY_PATH'] %>
-
 - name: fedora-21
   driver_plugin: digital_ocean
   driver_config:
@@ -104,17 +95,6 @@ platforms:
 #     ssh_key: <%= ENV['DIGITALOCEAN_SSH_KEY_PATH'] %>
 #   run_list:
 #   - recipe[apt]
-
-- name: ubuntu-10.04
-  driver_plugin: digital_ocean
-  driver_config:
-    size: 2gb
-    image: ubuntu-10-04-x64
-    region: <%= ENV['DIGITALOCEAN_REGION'] %>
-    ssh_key_ids: <%= ENV['DIGITALOCEAN_SSH_KEY_IDS'] %>
-    ssh_key: <%= ENV['DIGITALOCEAN_SSH_KEY_PATH'] %>
-  run_list:
-  - recipe[apt]
 
 - name: ubuntu-12.04
   driver_plugin: digital_ocean
@@ -220,7 +200,6 @@ suites:
       'centos-5.8',
       'centos-6.5',
       'centos-7.0',
-      'fedora-20',
       'ubuntu-14.04'
     ]
 
@@ -235,7 +214,6 @@ suites:
       'centos-5.8',
       'centos-6.5',
       'centos-7.0',
-      'fedora-20',
       'fedora-21',
     ]
 
@@ -249,7 +227,7 @@ suites:
   #     'centos-5.8',
   #     'centos-6.5',
   #     'centos-7.0',
-  #     'fedora-20',
+  #     'fedora-21',
   #     'fedora-21',
   #     'debian-7.0',
   #     'ubuntu-10.04',
@@ -307,7 +285,6 @@ suites:
       'centos-5.8',
       'centos-6.5',
       'centos-7.0',
-      'fedora-20',
       'ubuntu-14.04'
     ]
 
@@ -322,7 +299,6 @@ suites:
       'centos-5.8',
       'centos-6.5',
       'centos-7.0',
-      'fedora-20',
       'fedora-21',
     ]
 
@@ -378,7 +354,6 @@ suites:
       'centos-5.8',
       'centos-6.5',
       'centos-7.0',
-      'fedora-20',
       'ubuntu-14.04'
     ]
 
@@ -393,7 +368,6 @@ suites:
       'centos-5.8',
       'centos-6.5',
       'centos-7.0',
-      'fedora-20',
       'fedora-21',
     ]
 
@@ -449,7 +423,6 @@ suites:
       'centos-5.8',
       'centos-6.5',
       'centos-7.0',
-      'fedora-20',
       'ubuntu-14.04'
     ]
 
@@ -464,6 +437,5 @@ suites:
       'centos-5.8',
       'centos-6.5',
       'centos-7.0',
-      'fedora-20',
       'fedora-21',
     ]
