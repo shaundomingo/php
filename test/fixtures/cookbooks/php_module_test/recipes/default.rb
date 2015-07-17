@@ -9,6 +9,8 @@
 # pears.
 ###############################
 
+Chef::Log.info("php version: #{node['php']['version']}")
+
 php_runtime 'default' do
   version node['php']['version']
   action :install

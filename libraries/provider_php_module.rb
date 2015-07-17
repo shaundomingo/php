@@ -1,8 +1,10 @@
 class Chef
   class Provider
     class PhpModule < Chef::Provider::LWRPBase
-      provides :php_module, platform_family: 'rhel' if respond_to?(:provides)
-      use_inline_resources if defined?(use_inline_resources)
+
+      provides :php_module, platform_family: 'rhel'
+
+      use_inline_resources
 
       def whyrun_supported?
         true
@@ -18,6 +20,8 @@ class Chef
       end
 
       action :install do
+        configure_package_repositories if new_resource.manage_package_repos
+
         package "#{new_resource.name} :install #{module_package_name}" do
           package_name module_package_name
           action :install
