@@ -26,11 +26,9 @@ class Chef
       provides :php_module
 
       attribute :module_name, kind_of: String, name_attribute: true
-      attribute :package_name, kind_of: String
-      attribute :php_home, default: nil
       attribute :version, default: nil
-
-      include PhpCookbook::Helpers
+      attribute :php_home, default: nil
+      attribute :manage_package_repos, kind_of: [TrueClass, FalseClass], default: true
     end
   end
 end

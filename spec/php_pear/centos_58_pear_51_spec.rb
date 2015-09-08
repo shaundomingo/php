@@ -6,7 +6,7 @@ describe 'php_pear_test::default' do
       platform: 'centos',
       version: '5.8',
       step_into: 'php_pear'
-      ) do |node|
+    ) do |node|
       node.set['php']['version'] = '5.1'
     end.converge('php_pear_test::default')
   end

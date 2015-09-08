@@ -324,7 +324,7 @@ module PhpCookbook
       return 'f67c480bcf2f6f703ec8d8a772540f4a518f766b08d634d7a919402c13a636cf' if parsed_version == '5.6.5'
       return '45adba5b4d2519f6174b85fd5b07a77389f397603d84084bdd26c44b3d7dc8af' if parsed_version == '5.5.21'
       return '6bf3b3ebefa600cfb6dd7f2678f23b17a958e82e8ce2d012286818d7c36dfd31' if parsed_version == '5.4.37'
-      # FIXME: look this up based on what?
+      # FIXME: look this up based on...  something?
     end
 
     def parsed_runtime_packages

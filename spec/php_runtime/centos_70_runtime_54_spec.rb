@@ -6,7 +6,7 @@ describe 'php_runtime_test::package' do
       platform: 'centos',
       version: '7.0',
       step_into: 'php_runtime'
-      ) do |node|
+    ) do |node|
       node.set['php']['version'] = '5.4'
     end.converge('php_runtime_test::package')
   end
