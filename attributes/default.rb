@@ -120,9 +120,9 @@ else
   default['php']['mysql']['package'] = 'php5-mysql'
 end
 
-default['php']['url'] = 'http://us1.php.net/get'
-default['php']['version'] = '5.6.13'
-default['php']['checksum'] = '92acc6c067f5e015a6881b4119eafec10eca11722e810f2c2083f72e17119bcf'
+default['php']['url'] = 'http://au1.php.net/distributions/'
+default['php']['version'] = '5.6.21'
+default['php']['checksum'] = '89047bc5219b95dcb47c045774893c4f'
 default['php']['prefix_dir'] = '/usr/local'
 
 default['php']['configure_options'] = %W(--prefix=#{php['prefix_dir']}
